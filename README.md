@@ -62,6 +62,34 @@
 pip install -r requirements.txt
 ```
 
+## 从 GitHub 下载后只运行网页端
+
+如果同学只是想打开 Streamlit 网页端，请先准备：
+
+- Python 3.10 或更高版本
+- Git，或者直接从 GitHub 下载 ZIP
+- `Datasets (2).zip` 数据集文件，放在项目文件夹内，或放在 `D:/Datasets (2).zip` / 上级文件夹中
+
+Mac 终端运行：
+
+```bash
+git clone https://github.com/KemiZHANG/cypher-nexus-wia2005.git
+cd cypher-nexus-wia2005
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install --upgrade pip
+python3 -m pip install -r requirements.txt
+python3 -m streamlit run streamlit_app.py
+```
+
+如果 Mac 没有 Git，可以先运行：
+
+```bash
+xcode-select --install
+```
+
+或者直接在 GitHub 页面点击 `Code -> Download ZIP`，解压后进入该文件夹再运行安装和 Streamlit 命令。
+
 ## CLI 运行方式
 
 运行全部 Part：
@@ -230,6 +258,34 @@ Every Part prints the dataset file, sheet name, row count, and columns used. The
 ```bash
 pip install -r requirements.txt
 ```
+
+## Clone From GitHub and Run Dashboard Only
+
+Requirements:
+
+- Python 3.10 or newer
+- Git, or download the repository ZIP from GitHub
+- `Datasets (2).zip` placed inside the project folder, parent folder, or supported dataset path
+
+Mac terminal commands:
+
+```bash
+git clone https://github.com/KemiZHANG/cypher-nexus-wia2005.git
+cd cypher-nexus-wia2005
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install --upgrade pip
+python3 -m pip install -r requirements.txt
+python3 -m streamlit run streamlit_app.py
+```
+
+If Git is not installed on Mac, run:
+
+```bash
+xcode-select --install
+```
+
+Alternatively, click `Code -> Download ZIP` on GitHub, unzip the project, open Terminal in that folder, then run the virtual environment, install, and Streamlit commands above.
 
 ## CLI Usage
 
