@@ -1,0 +1,43 @@
+Part 5 - The Split Signal Protocol
+
+Mission Problem
+Reconstruct grouped signal fragments in sequence while using valid and useful delayed fragments and skipping unrecoverable fragments.
+
+Algorithm Used
+Dynamic Programming Signal Reconstruction
+
+Rejected Algorithms
+- Greedy is rejected because it can permanently skip delayed fragments that are still recoverable.
+- Topological sort is rejected because ordering fragments does not decide which fragments should be included.
+
+Dataset
+dataset file: Part 5.xlsx
+dataset source: D:\Datasets (2).zip
+sheet name: A
+row count: 10
+columns used: Fragment_ID, Segment_Group, Sequence_No, Data_Block, Integrity_Status
+
+Key Result
+Final activation sequence: CNX-44 M13-76 X7P-91 TR5-11 KR9-31 LP4-62 ZZ1-20 AX2-55
+
+Result Explanation
+Fragments are reconstructed group by group; valid and delayed fragments are used, while corrupted or missing fragments are skipped.
+
+Time and Space Complexity
+Time O(nlogn) for grouping and ordering plus O(n) DP, space O(n).
+
+Detailed Output
+Reconstructed groups:
+Group | Score | Used_Fragments     | Sequence                   
+------+-------+--------------------+----------------------------
+Alpha | 6     | F01, F02, F03      | CNX-44 M13-76 X7P-91       
+Beta  | 7     | F05, F06, F07, F08 | TR5-11 KR9-31 LP4-62 ZZ1-20
+Gamma | 2     | F09                | AX2-55                     
+
+Skipped fragments:
+Group | Fragment_ID | Status    | Reason                               
+------+-------------+-----------+--------------------------------------
+Alpha | F04         | Corrupted | unrecoverable or lower-value fragment
+Gamma | F10         | Missing   | unrecoverable or lower-value fragment
+
+Final activation sequence: CNX-44 M13-76 X7P-91 TR5-11 KR9-31 LP4-62 ZZ1-20 AX2-55

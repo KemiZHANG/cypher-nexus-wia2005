@@ -1,0 +1,42 @@
+Part 3 - The Resource Lockdown
+
+Mission Problem
+Select checkpoints that maximize operational impact while staying within energy, time, and token limits.
+
+Algorithm Used
+Dynamic Programming Knapsack
+
+Rejected Algorithms
+- Greedy selection is rejected because the highest immediate efficiency can block a better final combination.
+- Brute force is rejected because checking every subset grows as O(2^n).
+
+Dataset
+dataset file: Part 3.xlsx
+dataset source: D:\Datasets (2).zip
+sheet name: A
+row count: 8
+columns used: Checkpoint, Energy_Cost, Time_Cost, Token_Cost, Operational_Impact
+
+Key Result
+Selected 4 checkpoints with total impact 46.
+
+Result Explanation
+The DP table compares taking or skipping each checkpoint and keeps only combinations within energy, time, and token limits.
+
+Time and Space Complexity
+Time O(n*E*T*K), space O(E*T*K) for energy, time, and token capacities.
+
+Detailed Output
+Capacities: Energy 15, Time 35, Token 4
+
+Checkpoint                     | Energy | Time | Token | Impact
+-------------------------------+--------+------+-------+-------
+Disable Camera Grid            | 3      | 8    | 1     | 11    
+Jam Patrol Drone Relay         | 5      | 11   | 1     | 14    
+Disrupt Escape Route Beacon    | 4      | 8    | 1     | 12    
+Upload False Navigation Beacon | 3      | 6    | 1     | 9     
+
+Total energy used: 15 / 15
+Total time used: 33 / 35
+Total tokens used: 4 / 4
+Total operational impact: 46

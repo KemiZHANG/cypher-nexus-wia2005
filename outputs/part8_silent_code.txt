@@ -1,0 +1,41 @@
+Part 8 - The Silent Code
+
+Mission Problem
+Scan intercepted messages for trigger phrases and rank messages by threat severity.
+
+Algorithm Used
+Brute Force String Matching + Threat Ranking
+
+Rejected Algorithms
+- KMP is rejected for this small demonstration because optimization is less important than transparent ranking logic.
+- Hash set lookup is rejected because it cannot naturally scan full text for multi-word trigger phrases.
+
+Dataset
+dataset file: Part 8.xlsx
+dataset source: D:\Datasets (2).zip
+sheet name: A
+row count: 8
+columns used: Message_ID, Text_Stream, Route_Tag
+
+Key Result
+Highest-ranked message: M04 with threat score 7.
+
+Result Explanation
+Each message is scanned with manual brute force phrase matching, then ranked by phrase weights and route-tag evidence.
+
+Time and Space Complexity
+Time O(messages*phrases*text_length*phrase_length), space O(messages+phrases).
+
+Detailed Output
+Fallback trigger phrases are used unless a trigger phrase dataset is present.
+
+Message_ID | Detected_Phrases                        | Route_Tag   | Threat_Score | Threat_Level
+-----------+-----------------------------------------+-------------+--------------+-------------
+M04        | silent code, shadow key, final protocol | GRID-HUB-B2 | 7            | Critical    
+M07        | shadow key, launch trigger              | None        | 5            | High        
+M08        | final protocol                          | CORE-LINK-7 | 4            | High        
+M06        | silent code                             | None        | 1            | Medium      
+M01        | None                                    | None        | 0            | Low         
+M02        | None                                    | None        | 0            | Low         
+M03        | None                                    | None        | 0            | Low         
+M05        | None                                    | None        | 0            | Low         

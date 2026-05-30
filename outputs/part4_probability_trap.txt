@@ -1,0 +1,41 @@
+Part 4 - The Probability Trap
+
+Mission Problem
+Choose the best route under uncertainty by balancing route risk, travel time, and success reward.
+
+Algorithm Used
+MCDA Weighted Scoring
+
+Rejected Algorithms
+- Expected value is rejected because it can ignore travel time and one-time survival constraints.
+- Risk-adjusted return is rejected because a very safe but low-reward route can defeat the mission objective.
+
+Dataset
+dataset file: Part 4.xlsx
+dataset source: D:\Datasets (2).zip
+sheet name: A
+row count: 5
+columns used: Route_ID, Route_Name, Travel_Time, Patrol_Probability, Sensor_Failure_Probability, Collapse_Probability, Success_Reward
+
+Key Result
+Chosen route: R3 - Cable-Car Line.
+
+Result Explanation
+The chosen route has the strongest weighted balance after normalizing risk, time, and reward.
+
+Time and Space Complexity
+Time O(n*c) for n routes and c criteria, space O(n).
+
+Detailed Output
+Weights: Risk 0.40, Time 0.20, Reward 0.40
+Multiple risks are combined using joint risk: 1 - product(1 - p_i).
+
+Route_ID | Route_Name             | Joint_Risk | N_Risk | N_Time | N_Reward | Final_Score
+---------+------------------------+------------+--------+--------+----------+------------
+R3       | Cable-Car Line         | 0.522      | 0      | 1      | 1        | 0.6        
+R5       | Maintenance Lift Shaft | 0.366      | 0.468  | 0.778  | 0.5      | 0.543      
+R1       | Ridge Tunnel           | 0.388      | 0.4    | 0.667  | 0.583    | 0.527      
+R4       | Drainage Channel       | 0.329      | 0.577  | 0.333  | 0.333    | 0.431      
+R2       | Forest Service Road    | 0.188      | 1      | 0      | 0        | 0.4        
+
+Chosen route: R3 - Cable-Car Line

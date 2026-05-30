@@ -1,0 +1,78 @@
+Part 6 - The Countdown Sequence
+
+Mission Problem
+Prioritize mixed operational events by threat, time, launch relevance, and stable arrival order.
+
+Algorithm Used
+Modified Stable Merge Sort
+
+Rejected Algorithms
+- Insertion Sort is rejected because the stream is not guaranteed to be nearly sorted and may degrade to O(n^2).
+- Counting/Radix Sort is rejected because the sorting key mixes numeric priority, timestamp, event type, and original order.
+
+Dataset
+dataset file: Part 6.xlsx
+dataset source: D:\Datasets (2).zip
+sheet name: A
+row count: 10
+columns used: Event_ID, Threat_Priority, Timestamp, Zone, Event_Type, Code_Value
+
+Key Result
+Top urgent event after sorting: E091.
+
+Result Explanation
+Events are ordered by the PPT key: higher threat first, earlier timestamp next, launch relevance next, and original order last for stability.
+
+Time and Space Complexity
+Time O(nlogn), space O(n).
+
+Detailed Output
+Sorting key explanation:
+(-Threat_Priority, Timestamp, Launch_Rank, Original_Index)
+- Negative Threat_Priority makes higher threat values appear first.
+- Timestamp puts earlier events first when priority ties.
+- Launch_Rank prioritizes launch-related event types when earlier fields tie.
+- Original_Index preserves stable arrival order when all priority fields are equal.
+
+Manual implementation confirmation:
+The project implements merge sort manually through stable_merge_sort_events(); it does not rely on Python sorted() as the sorting algorithm for Part 6.
+
+Why Modified Stable Merge Sort is chosen:
+It supports multi-field comparison, preserves equal-record order, and keeps reliable O(nlogn) time even when the stream is scrambled.
+
+Original event order:
+Event_ID | Threat_Priority | Timestamp | Zone | Event_Type       | Code_Value
+---------+-----------------+-----------+------+------------------+-----------
+E104     | 5               | 04:21:15  | Z3   | Biometric Alert  | 881       
+E098     | 2               | 04:20:40  | Z1   | Door Access      | 204       
+E121     | 1               | 04:21:30  | Z5   | Launch Trigger   | 997       
+E087     | 4               | 04:19:58  | Z2   | Drone Entry      | 650       
+E110     | 3               | 04:21:05  | Z4   | Sensor Fault     | 412       
+E126     | 2               | 04:21:34  | Z1   | Door Access      | 210       
+E091     | 5               | 04:20:10  | Z3   | Thermal Alarm    | 702       
+E118     | 1               | 04:21:22  | Z5   | Launch Trigger   | 994       
+E103     | 4               | 04:21:11  | Z2   | Patrol Shift     | 503       
+E095     | 3               | 04:20:25  | Z4   | Override Attempt | 455       
+
+Sorted event order:
+Event_ID | Threat_Priority | Timestamp | Zone | Event_Type       | Code_Value
+---------+-----------------+-----------+------+------------------+-----------
+E091     | 5               | 04:20:10  | Z3   | Thermal Alarm    | 702       
+E104     | 5               | 04:21:15  | Z3   | Biometric Alert  | 881       
+E087     | 4               | 04:19:58  | Z2   | Drone Entry      | 650       
+E103     | 4               | 04:21:11  | Z2   | Patrol Shift     | 503       
+E095     | 3               | 04:20:25  | Z4   | Override Attempt | 455       
+E110     | 3               | 04:21:05  | Z4   | Sensor Fault     | 412       
+E098     | 2               | 04:20:40  | Z1   | Door Access      | 204       
+E126     | 2               | 04:21:34  | Z1   | Door Access      | 210       
+E118     | 1               | 04:21:22  | Z5   | Launch Trigger   | 994       
+E121     | 1               | 04:21:30  | Z5   | Launch Trigger   | 997       
+
+Top 5 urgent events:
+Event_ID | Threat_Priority | Timestamp | Zone | Event_Type       | Code_Value
+---------+-----------------+-----------+------+------------------+-----------
+E091     | 5               | 04:20:10  | Z3   | Thermal Alarm    | 702       
+E104     | 5               | 04:21:15  | Z3   | Biometric Alert  | 881       
+E087     | 4               | 04:19:58  | Z2   | Drone Entry      | 650       
+E103     | 4               | 04:21:11  | Z2   | Patrol Shift     | 503       
+E095     | 3               | 04:20:25  | Z4   | Override Attempt | 455       

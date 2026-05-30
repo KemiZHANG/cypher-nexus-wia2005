@@ -1,0 +1,65 @@
+Operation Cypher Nexus - Run Summary
+
+Part 1: The Shadow Network
+Dataset file: Part 1.xlsx
+Sheet name: C
+Row count: 13
+Columns used: From_Node, To_Node, Distance, Risk_Level, Detection_Probability, Route_Status
+TXT output: outputs\part1_shadow_network.txt
+CSV outputs: outputs\part1_shadow_network_route_summary.csv
+
+Part 2: The Double Agent Registry
+Dataset file: Part 2.xlsx
+Sheet name: A
+Row count: 14
+Columns used: Agent_ID, Alias, Access_Key, Status, Linked_Site
+TXT output: outputs\part2_double_agent_registry.txt
+CSV outputs: outputs\part2_double_agent_registry_suspicious_identities.csv
+
+Part 3: The Resource Lockdown
+Dataset file: Part 3.xlsx
+Sheet name: A
+Row count: 8
+Columns used: Checkpoint, Energy_Cost, Time_Cost, Token_Cost, Operational_Impact
+TXT output: outputs\part3_resource_lockdown.txt
+CSV outputs: outputs\part3_resource_lockdown_selected_checkpoints.csv
+
+Part 4: The Probability Trap
+Dataset file: Part 4.xlsx
+Sheet name: A
+Row count: 5
+Columns used: Route_ID, Route_Name, Travel_Time, Patrol_Probability, Sensor_Failure_Probability, Collapse_Probability, Success_Reward
+TXT output: outputs\part4_probability_trap.txt
+CSV outputs: outputs\part4_probability_trap_route_scores.csv
+
+Part 5: The Split Signal Protocol
+Dataset file: Part 5.xlsx
+Sheet name: A
+Row count: 10
+Columns used: Fragment_ID, Segment_Group, Sequence_No, Data_Block, Integrity_Status
+TXT output: outputs\part5_split_signal_protocol.txt
+CSV outputs: outputs\part5_split_signal_protocol_reconstructed_groups.csv, outputs\part5_split_signal_protocol_skipped_fragments.csv
+
+Part 6: The Countdown Sequence
+Dataset file: Part 6.xlsx
+Sheet name: A
+Row count: 10
+Columns used: Event_ID, Threat_Priority, Timestamp, Zone, Event_Type, Code_Value
+TXT output: outputs\part6_countdown_sequence.txt
+CSV outputs: outputs\part6_countdown_sequence_original_order.csv, outputs\part6_countdown_sequence_sorted_order.csv, outputs\part6_countdown_sequence_top_five.csv
+
+Part 7: The Phantom Dice
+Dataset file: Part 7.xlsx
+Sheet name: A
+Row count: 8
+Columns used: Sector, Patrol_Frequency, Thermal_Scan_Level, Drone_Coverage, Predicted_By_Enemy, Decoy_Value
+TXT output: outputs\part7_phantom_dice.txt
+CSV outputs: outputs\part7_phantom_dice_sector_scores.csv
+
+Part 8: The Silent Code
+Dataset file: Part 8.xlsx
+Sheet name: A
+Row count: 8
+Columns used: Message_ID, Text_Stream, Route_Tag
+TXT output: outputs\part8_silent_code.txt
+CSV outputs: outputs\part8_silent_code_ranked_messages.csv

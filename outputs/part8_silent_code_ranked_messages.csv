@@ -1,0 +1,9 @@
+﻿Message_ID,Detected_Phrases,Route_Tag,Threat_Score,Threat_Level
+M04,"silent code, shadow key, final protocol",GRID-HUB-B2,7,Critical
+M07,"shadow key, launch trigger",None,5,High
+M08,final protocol,CORE-LINK-7,4,High
+M06,silent code,None,1,Medium
+M01,None,None,0,Low
+M02,None,None,0,Low
+M03,None,None,0,Low
+M05,None,None,0,Low

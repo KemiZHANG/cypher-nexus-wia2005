@@ -1,0 +1,3 @@
+﻿Group,Fragment_ID,Status,Reason
+Alpha,F04,Corrupted,unrecoverable or lower-value fragment
+Gamma,F10,Missing,unrecoverable or lower-value fragment

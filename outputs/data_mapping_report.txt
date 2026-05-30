@@ -1,0 +1,100 @@
+Cypher Nexus Data Mapping Report
+
+Part 1 - The Shadow Network
+Dataset file: Part 1.xlsx
+Sheet name: C
+Row count: 13
+Columns used by algorithm: From_Node, To_Node, Distance, Risk_Level, Detection_Probability, Route_Status
+Original column -> algorithm field:
+- From_Node -> From_Node
+- To_Node -> To_Node
+- Distance -> Distance
+- Risk_Level -> Risk_Level
+- Detection_Probability -> Detection_Probability
+- Route_Status -> Route_Status
+
+Part 2 - The Double Agent Registry
+Dataset file: Part 2.xlsx
+Sheet name: A
+Row count: 14
+Columns used by algorithm: Agent_ID, Alias, Access_Key, Status, Linked_Site
+Original column -> algorithm field:
+- Agent_ID -> Agent_ID
+- Alias -> Alias
+- Access_Key -> Access_Key
+- Status -> Status
+- Linked_Site -> Linked_Site
+
+Part 3 - The Resource Lockdown
+Dataset file: Part 3.xlsx
+Sheet name: A
+Row count: 8
+Columns used by algorithm: Checkpoint, Energy_Cost, Time_Cost, Token_Cost, Operational_Impact
+Original column -> algorithm field:
+- Checkpoint -> Checkpoint
+- Energy_Cost -> Energy_Cost
+- Time_Cost -> Time_Cost
+- Token_Cost -> Token_Cost
+- Operational_Impact -> Operational_Impact
+
+Part 4 - The Probability Trap
+Dataset file: Part 4.xlsx
+Sheet name: A
+Row count: 5
+Columns used by algorithm: Route_ID, Route_Name, Travel_Time, Patrol_Probability, Sensor_Failure_Probability, Collapse_Probability, Success_Reward
+Original column -> algorithm field:
+- Route_ID -> Route_ID
+- Route_Name -> Route_Name
+- Travel_Time -> Travel_Time
+- Patrol_Probability -> Patrol_Probability
+- Sensor_Failure_Probability -> Sensor_Failure_Probability
+- Collapse_Probability -> Collapse_Probability
+- Success_Reward -> Success_Reward
+
+Part 5 - The Split Signal Protocol
+Dataset file: Part 5.xlsx
+Sheet name: A
+Row count: 10
+Columns used by algorithm: Fragment_ID, Segment_Group, Sequence_No, Data_Block, Integrity_Status
+Original column -> algorithm field:
+- Fragment_ID -> Fragment_ID
+- Segment_Group -> Segment_Group
+- Sequence_No -> Sequence_No
+- Data_Block -> Data_Block
+- Integrity_Status -> Integrity_Status
+
+Part 6 - The Countdown Sequence
+Dataset file: Part 6.xlsx
+Sheet name: A
+Row count: 10
+Columns used by algorithm: Event_ID, Threat_Priority, Timestamp, Zone, Event_Type, Code_Value
+Original column -> algorithm field:
+- Event_ID -> Event_ID
+- Threat_Priority -> Threat_Priority
+- Timestamp -> Timestamp
+- Zone -> Zone
+- Event_Type -> Event_Type
+- Code_Value -> Code_Value
+
+Part 7 - The Phantom Dice
+Dataset file: Part 7.xlsx
+Sheet name: A
+Row count: 8
+Columns used by algorithm: Sector, Patrol_Frequency, Thermal_Scan_Level, Drone_Coverage, Predicted_By_Enemy, Decoy_Value
+Original column -> algorithm field:
+- Sector -> Sector
+- Patrol_Frequency -> Patrol_Frequency
+- Thermal_Scan_Level -> Thermal_Scan_Level
+- Drone_Coverage -> Drone_Coverage
+- Predicted_By_Enemy -> Predicted_By_Enemy
+- Decoy_Value -> Decoy_Value
+
+Part 8 - The Silent Code
+Dataset file: Part 8.xlsx
+Sheet name: A
+Row count: 8
+Columns used by algorithm: Message_ID, Text_Stream, Route_Tag
+Original column -> algorithm field:
+- Message_ID -> Message_ID
+- Text_Stream -> Text_Stream
+- Route_Tag -> Route_Tag

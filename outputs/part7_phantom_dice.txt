@@ -1,0 +1,46 @@
+Part 7 - The Phantom Dice
+
+Mission Problem
+Choose a movement sector that is safe enough while avoiding deterministic patterns the enemy can predict.
+
+Algorithm Used
+Controlled Randomisation
+
+Rejected Algorithms
+- Deterministic best route is rejected because repeated optimal moves become predictable to enemy AI.
+- Pure random movement is rejected because it ignores surveillance risk and decoy usefulness.
+
+Dataset
+dataset file: Part 7.xlsx
+dataset source: D:\Datasets (2).zip
+sheet name: A
+row count: 8
+columns used: Sector, Patrol_Frequency, Thermal_Scan_Level, Drone_Coverage, Predicted_By_Enemy, Decoy_Value
+
+Key Result
+Chosen sector: S4.
+
+Result Explanation
+The selected sector comes from weighted randomness, so safer high-decoy sectors are more likely without becoming fully predictable.
+
+Time and Space Complexity
+Time O(n) for scoring and weighted selection, space O(n).
+
+Detailed Output
+Risk = Patrol + Thermal + Drone + PredictionPenalty(5 if predicted).
+Selection score = Decoy_Value / Risk.
+Random seed: 2005
+Random draw: 0.45
+
+Sector | Risk | Decoy_Value | Selection_Score | Probability
+-------+------+-------------+-----------------+------------
+S6     | 9    | 9           | 1               | 0.273      
+S2     | 11   | 8           | 0.727           | 0.199      
+S4     | 14   | 7           | 0.5             | 0.136      
+S7     | 16   | 7           | 0.438           | 0.119      
+S1     | 13   | 5           | 0.385           | 0.105      
+S8     | 15   | 4           | 0.267           | 0.073      
+S5     | 25   | 6           | 0.24            | 0.066      
+S3     | 28   | 3           | 0.107           | 0.029      
+
+Chosen sector: S4

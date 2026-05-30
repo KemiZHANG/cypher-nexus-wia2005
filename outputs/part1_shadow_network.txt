@@ -1,0 +1,37 @@
+Part 1 - The Shadow Network
+
+Mission Problem
+Find a feasible directed route through the harbour network while balancing distance, risk, and detection exposure.
+
+Algorithm Used
+Modified Risk-Aware Dijkstra
+
+Rejected Algorithms
+- BFS is rejected because it treats all routes as equal and cannot model weighted distance, risk, or detection.
+- Standard Dijkstra is rejected because it optimizes distance only, while this mission must balance safety and speed.
+
+Dataset
+dataset file: Part 1.xlsx
+dataset source: D:\Datasets (2).zip
+sheet name: C
+row count: 13
+columns used: From_Node, To_Node, Distance, Risk_Level, Detection_Probability, Route_Status
+
+Key Result
+Selected route: Port Authority Hub -> Warehouse A -> Safe House 1 -> Financial Vault Access
+
+Result Explanation
+The selected path has the lowest modified cost after combining distance, risk, and detection probability.
+
+Time and Space Complexity
+Time O((V+E)logV), space O(V+E).
+
+Detailed Output
+Start: Port Authority Hub
+Destination: Financial Vault Access
+Route: Port Authority Hub -> Warehouse A -> Safe House 1 -> Financial Vault Access
+Total distance: 15
+Total risk: 9
+Total detection: 0.31
+Total modified cost: 36.1
+Cost formula: Distance + Risk_Level * 2 + Detection_Probability * 10

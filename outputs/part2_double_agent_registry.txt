@@ -1,0 +1,47 @@
+Part 2 - The Double Agent Registry
+
+Mission Problem
+Detect suspicious identities using exact duplicate evidence and near-duplicate alias evidence.
+
+Algorithm Used
+Two-Stage Hybrid Verification System: Hash Table Filtering + Levenshtein Distance
+
+Rejected Algorithms
+- Linear search is rejected because repeated pairwise checking is too slow for large registries.
+- Hash table only is rejected because it cannot detect near-duplicate aliases such as Falcon and Falcon_1.
+
+Dataset
+dataset file: Part 2.xlsx
+dataset source: D:\Datasets (2).zip
+sheet name: A
+row count: 14
+columns used: Agent_ID, Alias, Access_Key, Status, Linked_Site
+
+Key Result
+Highest suspicious identity: A2876 with score 12.
+
+Result Explanation
+Hash tables quickly identify exact repeated evidence, then Levenshtein distance adds near-alias evidence before ranking identities by suspicion score.
+
+Time and Space Complexity
+Hash filtering O(n); near-alias verification O(a^2*m*n) for unique aliases and string lengths; space O(n).
+
+Detailed Output
+Stage 1: Hash tables filter repeated aliases, access keys, and linked sites.
+Stage 2: Levenshtein distance checks near-duplicate aliases.
+
+Agent_ID | Alias    | Access_Key | Status     | Linked_Site           | Suspicion_Score | Reasons                                                                                                         
+---------+----------+------------+------------+-----------------------+-----------------+-----------------------------------------------------------------------------------------------------------------
+A2876    | Falcon_1 | T7Q1       | Suspicious | Greyfen Reach         | 12              | same access key +5; near-duplicate alias +3: Falcon (d=2); repeated linked site +2; suspicious/missing status +2
+A3102    | Raven    | K9X4       | Suspicious | Greyfen Reach         | 12              | same alias +3; same access key +5; repeated linked site +2; suspicious/missing status +2                        
+A5127    | Cipher   | Z1L9       | Inactive   | Greyfen Reach         | 12              | same alias +3; same access key +5; repeated linked site +2; suspicious/missing status +2                        
+A8044    | Cipher   | Z1L9       | Suspicious | Greyfen Reach         | 12              | same alias +3; same access key +5; repeated linked site +2; suspicious/missing status +2                        
+A9012    | Viper    | M2P7       | Missing    | Greyfen Reach         | 12              | same alias +3; same access key +5; repeated linked site +2; suspicious/missing status +2                        
+A9771    | Nova     | P5H6       | Suspicious | Greyfen Reach         | 12              | same alias +3; same access key +5; repeated linked site +2; suspicious/missing status +2                        
+A1023    | Raven    | K9X4       | Active     | East Daran Depot      | 10              | same alias +3; same access key +5; repeated linked site +2                                                      
+A1194    | Falcon   | T7Q1       | Missing    | North Cargo Pier      | 10              | same access key +5; near-duplicate alias +3: Falcon_1 (d=2); suspicious/missing status +2                       
+A2088    | Viper    | M2P7       | Active     | Greyfen Reach         | 10              | same alias +3; same access key +5; repeated linked site +2                                                      
+A3884    | Nova     | P5H6       | Active     | Crestfall Exchange    | 8               | same alias +3; same access key +5                                                                               
+A6401    | Ghost    | B8D8       | Suspicious | Red Harbor Checkpoint | 7               | same alias +3; repeated linked site +2; suspicious/missing status +2                                            
+A9450    | Echo     | K9X4       | Active     | East Daran Depot      | 7               | same access key +5; repeated linked site +2                                                                     
+A4410    | Ghost    | B8D3       | Active     | Red Harbor Checkpoint | 5               | same alias +3; repeated linked site +2                                                                          

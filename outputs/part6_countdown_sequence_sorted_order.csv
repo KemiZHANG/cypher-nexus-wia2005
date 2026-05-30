@@ -1,0 +1,11 @@
+﻿Event_ID,Threat_Priority,Timestamp,Zone,Event_Type,Code_Value
+E091,5,04:20:10,Z3,Thermal Alarm,702
+E104,5,04:21:15,Z3,Biometric Alert,881
+E087,4,04:19:58,Z2,Drone Entry,650
+E103,4,04:21:11,Z2,Patrol Shift,503
+E095,3,04:20:25,Z4,Override Attempt,455
+E110,3,04:21:05,Z4,Sensor Fault,412
+E098,2,04:20:40,Z1,Door Access,204
+E126,2,04:21:34,Z1,Door Access,210
+E118,1,04:21:22,Z5,Launch Trigger,994
+E121,1,04:21:30,Z5,Launch Trigger,997
