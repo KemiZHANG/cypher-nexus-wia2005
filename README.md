@@ -150,14 +150,14 @@ powershell -ExecutionPolicy Bypass -File .\run_dashboard_chrome.ps1
 
 - 英文 / 中文 / Bahasa Melayu 三语切换
 - 8 个 Part 的任务卡
-- Mission Challenge Mode：选择正确算法后解锁结果
+- Sequential Review Mode：按顺序比较算法，选择正确算法后显示官方结果
 - Direct Demo Mode：快速显示官方输出
 - 数据集面板：文件、sheet、行数、使用列
 - Algorithm Decision：候选算法、被拒算法、选定算法
 - Key Takeaway / Why it matters
 - 结果卡片、图表、复杂度徽章、答辩要点
-- 答对后金币奖励和徽章反馈
-- Mission Log 和 Next Mission 导航
+- 答对后奖励币飞入奖励袋，并记录证据标记
+- Execution Log 和 Next Part 导航
 - Direct Demo 默认只渲染一个详细 Part，使页面切换更快
 - 数据预览和 dashboard 结果调用使用 Streamlit 缓存，重复点击更快
 
@@ -208,14 +208,14 @@ python -m unittest test_cypher_nexus_project.py
 
 This is the Python implementation and local Streamlit dashboard for the WIA2005 group project. `cypher_nexus_project.py` remains the source of truth for official algorithms, CLI commands, dataset loading, and saved outputs. `streamlit_app.py` is only a local browser visualization layer that reuses the core project functions.
 
-The selected algorithms still follow the group PPT. The dashboard improves presentation clarity without changing official algorithm logic or output.
+The selected algorithms still follow the group PPT. The dashboard improves explanation clarity without changing official algorithm logic or output.
 
 ## Main Files
 
 - `cypher_nexus_project.py`: core program for all 8 Parts, dataset loading, CLI, and saved outputs.
 - `streamlit_app.py`: local Streamlit dashboard that imports and reuses `cypher_nexus_project.py`.
 - `dashboard_content.py`: mission metadata, candidate algorithms, rejection reasons, key takeaways, and Defense Matrix content.
-- `dashboard_components.py`: reusable Streamlit UI components such as cards, badges, coin rewards, dataset panels, and mission logs.
+- `dashboard_components.py`: reusable Streamlit UI components such as cards, badges, reward-vault animation, dataset panels, and execution logs.
 - `dashboard_i18n.py`: English / 中文 / Bahasa Melayu UI text.
 - `run_dashboard_chrome.ps1`: Windows helper that opens the dashboard in Google Chrome.
 - `colab_runner.py`: simple Google Colab runner.
@@ -347,14 +347,14 @@ Dashboard features:
 
 - English / 中文 / Bahasa Melayu language selector
 - 8 mission cards
-- Mission Challenge Mode: choose the correct algorithm before the result unlocks
+- Sequential Review Mode: compare algorithms in order before the official result appears
 - Direct Demo Mode: quickly show official outputs
 - dataset file, sheet, row count, and columns used
 - candidate algorithms, rejected algorithms, and chosen algorithm
 - Key Takeaway / Why it matters
 - result cards, charts, complexity badges, and defense notes
-- coin and badge feedback after correct answers
-- Mission Log and Next Mission navigation
+- reward-token animation and evidence-mark feedback after correct answers
+- Execution Log and Next Part navigation
 - faster page switching through Streamlit caching and one-Part-at-a-time detailed rendering
 
 The dashboard is a local visualization layer only. Official algorithms and saved TXT/CSV outputs still come from `cypher_nexus_project.py`.

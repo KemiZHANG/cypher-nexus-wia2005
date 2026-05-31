@@ -15,6 +15,7 @@ from cypher_nexus_project import (
 )
 from dashboard_components import badge, card_html, coin_reward_panel_html
 from dashboard_content import (
+    ALGORITHM_DECISIONS,
     DEFENSE_MATRIX_COLUMNS,
     DEFENSE_NOTES,
     KEY_TAKEAWAYS,
@@ -155,8 +156,8 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
         self.assertEqual(set(LANGUAGE_OPTIONS), {"English", "中文", "Bahasa Melayu"})
         self.assertEqual(t("run_selected", "中文"), "运行选中部分")
         self.assertEqual(t("run_all", "Bahasa Melayu"), "Jalankan semua bahagian")
-        self.assertIn("倒计时序列", part_label(6, "中文"))
-        self.assertIn("Urutan Kiraan Detik", part_label(6, "Bahasa Melayu"))
+        self.assertIn("倒计时事件排序", part_label(6, "中文"))
+        self.assertIn("Susunan Acara Kiraan Detik", part_label(6, "Bahasa Melayu"))
 
         part_info = localized_part_info(6, "中文")
         self.assertIn("多字段", part_info["mission_problem"])
@@ -190,8 +191,9 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
         cards = build_mission_cards({}, "English", completed_missions=set())
         self.assertEqual(len(cards), 8)
         self.assertEqual(cards[0]["status"], "READY")
-        self.assertEqual(cards[1]["status"], "LOCKED")
+        self.assertEqual(cards[1]["status"], "PENDING")
         self.assertIn("chosen_algorithm", cards[0])
+        self.assertEqual(len(ALGORITHM_DECISIONS), 8)
 
     def test_dashboard_content_balances_all_parts_and_demo_flow(self):
         for part_number in range(1, 9):
@@ -219,6 +221,7 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
                 "Chosen Algorithm",
                 "Key Output",
                 "Complexity",
+                "Defense Notes",
             ],
         )
         rows = build_defense_matrix_rows()
@@ -231,6 +234,7 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
             self.assertTrue(row["Chosen Algorithm"])
             self.assertTrue(row["Key Output"])
             self.assertTrue(row["Complexity"])
+            self.assertTrue(row["Defense Notes"])
 
     def test_challenge_mode_algorithm_choices_match_ppt_decisions(self):
         expected_correct = {
@@ -257,12 +261,12 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
         self.assertEqual(state["completed_missions"], set())
         self.assertEqual(state["current_mission"], 1)
         self.assertEqual(mission_status(1, state["completed_missions"]), "READY")
-        self.assertEqual(mission_status(2, state["completed_missions"]), "LOCKED")
+        self.assertEqual(mission_status(2, state["completed_missions"]), "PENDING")
 
         completed_state = build_challenge_state(completed_missions={1}, coins=1, current_mission=2)
         self.assertEqual(mission_status(1, completed_state["completed_missions"]), "COMPLETED")
         self.assertEqual(mission_status(2, completed_state["completed_missions"]), "READY")
-        self.assertEqual(mission_status(3, completed_state["completed_missions"]), "LOCKED")
+        self.assertEqual(mission_status(3, completed_state["completed_missions"]), "PENDING")
 
     def test_challenge_choice_feedback_does_not_change_official_outputs(self):
         state = build_challenge_state()
@@ -297,16 +301,17 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
 
     def test_coin_reward_panel_has_animation_hooks(self):
         html = coin_reward_panel_html(
-            title="Mission Completed",
-            message="Layer disabled.",
+            title="Part Completed",
+            message="Route computed.",
             coins=3,
-            badge_label="Part 1 Badge",
-            result_label="Result unlocked",
+            badge_label="Part 1 Evidence Mark",
+            result_label="Result available",
         )
         self.assertIn("coin-reward-panel", html)
-        self.assertIn("coin-orbit", html)
+        self.assertIn("coin-flight", html)
+        self.assertIn("reward-vault", html)
         self.assertIn("+1", html)
-        self.assertIn("Part 1 Badge", html)
+        self.assertIn("Part 1 Evidence Mark", html)
 
     def test_cli_contract_for_required_commands_is_still_available(self):
         self.assertEqual(set(RUNNERS_BY_PART), set(range(1, 9)))

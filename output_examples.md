@@ -162,12 +162,12 @@ The landing page shows:
 ```text
 Operation Cypher Nexus: The Final Protocol
 Algorithmic Mission Control Dashboard
-Challenge progress, coins, and badges
-8 mission cards with LOCKED / READY / COMPLETED status
+Sequential review progress, reward tokens, and evidence marks
+8 part cards with PENDING / READY / COMPLETED status
 Defense Matrix covering Parts 1-8
 ```
 
-Mission Challenge Mode shows three algorithm choices per Part. A wrong choice shows `Access Denied`, the rejection reason, and `Try again`; it does not unlock or overwrite official outputs. A correct choice marks the mission completed, awards one coin/badge, runs the official Part runner, and unlocks the result.
+Sequential Review Mode shows three algorithm choices per Part. An alternative choice shows the rejection reason and does not unlock or overwrite official outputs. A correct choice marks the Part completed, awards one reward token/evidence mark, runs the official Part runner, and makes the result available.
 
 Direct Demo Mode provides:
 

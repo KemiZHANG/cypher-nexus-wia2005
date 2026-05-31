@@ -24,7 +24,7 @@ If the default Lenovo browser shows garbled text, open the dashboard through Chr
 .\run_dashboard_chrome.ps1
 ```
 
-The dashboard is only a visualization layer. The real algorithms are implemented in `cypher_nexus_project.py`. Start from the landing page, show the Challenge Mode progress, coins/badges, and LOCKED / READY / COMPLETED mission cards. Explain that wrong algorithm choices are quiz feedback only and do not change official outputs.
+The dashboard is only a visualization layer. The real algorithms are implemented in `cypher_nexus_project.py`. Start from the landing page, show the Sequential Review progress, reward tokens/evidence marks, and PENDING / READY / COMPLETED part cards. Explain that alternative algorithm choices are comparison feedback only and do not change official outputs.
 
 Suggested dashboard flow:
 
@@ -32,9 +32,9 @@ Suggested dashboard flow:
 2. Show `--list-data` evidence for dataset files, sheets, rows, and columns.
 3. Open the dashboard and show the mission overview.
 4. Show the Defense Matrix to prove all 8 Parts have dataset evidence, candidate algorithms, rejected algorithms, chosen algorithms, outputs, and complexity.
-5. Use `Mission Challenge Mode` and intentionally choose one wrong algorithm to show `Access Denied`, the rejection reason, and `Try again`.
-6. Choose the correct PPT algorithm to show `Mission Completed`, award one coin/badge, run the official output, and unlock the result.
-7. Use `Direct Demo Mode` when the teacher wants to skip the challenge and press `Run All / Show All Results`.
+5. Use `Sequential Review Mode` and intentionally choose one alternative algorithm to show the rejection reason.
+6. Choose the correct PPT algorithm to show the reward-vault animation, award one reward token/evidence mark, run the official output, and make the result available.
+7. Use `Direct Demo Mode` when the teacher wants to skip the sequential review and press `Run All / Show All Results`.
 8. Explain one assigned Part in detail while still reminding the teacher that every Part follows the same group-wide evidence structure.
 
 After each mission, point to the same defense order: Key Takeaway, Why it matters, Mission Brief, Dataset Used, Algorithm Decision, Candidate Algorithms, Rejected Algorithms, Chosen Algorithm, Key Result, Visualization, Complexity, Defense Notes, and mission-forward explanation.
@@ -100,12 +100,12 @@ python cypher_nexus_project.py --part 6
 
 Dashboard flow for Part 6:
 
-1. In Challenge Mode, complete Parts 1-5 or switch to Direct Demo Mode for a fast teacher demo.
+1. In Sequential Review Mode, complete Parts 1-5 or switch to Direct Demo Mode for a fast teacher demo.
 2. Show Mission Brief: this is a multi-field priority sorting problem.
 3. Show Dataset Used: file, sheet, rows, and columns.
 4. In the algorithm challenge, show why Insertion Sort and Counting-Radix Sort are rejected.
 5. Select `Modified Stable Merge Sort` as the correct PPT algorithm.
-6. Show Mission Completed badges and the official Part 6 result.
+6. Show the completion status, evidence marks, and the official Part 6 result.
 7. Compare original event order and sorted event order.
 8. Show top 5 urgent events and explain the sorting key.
 9. Use the urgent-event chart as a quick visual summary, then return to the tables for evidence.

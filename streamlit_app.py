@@ -22,6 +22,7 @@ from cypher_nexus_project import (
 
 from dashboard_content import (
     ALGORITHM_CHOICES,
+    ALGORITHM_DECISIONS,
     CANDIDATE_ALGORITHMS,
     DEFENSE_MATRIX_COLUMNS,
     DEFENSE_NOTES,
@@ -64,7 +65,7 @@ def run_all_official_parts_cached():
 
 def build_challenge_state(completed_missions=None, coins=0, current_mission=1, mode="landing"):
     completed = set(completed_missions or set())
-    badges = [f"Part {part_number} Badge" for part_number in sorted(completed)]
+    badges = [f"Part {part_number} Evidence Mark" for part_number in sorted(completed)]
     return {
         "results": {},
         "mission_log": [],
@@ -83,7 +84,7 @@ def mission_status(part_number, completed_missions):
         return "COMPLETED"
     if part_number == 1 or (part_number - 1) in completed:
         return "READY"
-    return "LOCKED"
+    return "PENDING"
 
 
 def apply_algorithm_choice(part_number, selected_algorithm, state):
@@ -109,7 +110,7 @@ def apply_algorithm_choice(part_number, selected_algorithm, state):
         completed.add(part_number)
         state["coins"] = int(state.get("coins", 0)) + 1
         badges = state.setdefault("badges", [])
-        badge_name = f"Part {part_number} Badge"
+        badge_name = f"Part {part_number} Evidence Mark"
         if badge_name not in badges:
             badges.append(badge_name)
 
@@ -210,7 +211,7 @@ def run_part_and_store(part_number, sheet_override, language):
 
 def render_coin_reward_for_part(part_number, language, feedback=None):
     message = feedback.get("feedback") if feedback else MISSION_FEEDBACK[part_number]
-    badge_label = f"Part {part_number} Badge"
+    badge_label = f"Part {part_number} Evidence Mark"
     st.markdown(
         coin_reward_panel_html(
             title=t("coin_reward", language),
@@ -458,7 +459,7 @@ def render_part6_tables(result, language):
     top = dataframe_from_rows(result.get("top_five", []))
     st.write(t("top_five", language))
     if not top.empty:
-        render_table_note("Top urgent events are highlighted for fast presentation defense.")
+        render_table_note("Top urgent events are highlighted to support explanation of the sorting result.")
         st.dataframe(top.style.highlight_max(subset=["Threat_Priority"], color="#fff2a8"), width="stretch")
         st.caption("Top urgent events threat-priority chart")
         st.bar_chart(top.set_index("Event_ID")["Threat_Priority"])
@@ -544,7 +545,7 @@ def render_defense_matrix(results, language):
 def render_algorithm_choice(part_number, language, sheet_override):
     choices = ALGORITHM_CHOICES[part_number]
     section_header(t("choose_algorithm", language))
-    st.caption("Wrong choices are presentation feedback only. Official outputs stay unchanged until the selected mission runner executes.")
+    st.caption("Alternative selections are used only for algorithm comparison. Official outputs stay unchanged until the selected runner executes.")
     columns = st.columns(3)
     for index, option in enumerate(choices["options"]):
         with columns[index]:
@@ -553,7 +554,7 @@ def render_algorithm_choice(part_number, language, sheet_override):
                 <div class="choice-card">
                     {badge('OPTION ' + str(index + 1), 'muted')}
                     <strong>{option}</strong>
-                    <span class="card-small">Select to test the defense logic.</span>
+                    <span class="card-small">Select to compare the reasoning.</span>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -574,16 +575,6 @@ def render_algorithm_choice(part_number, language, sheet_override):
     if not feedback:
         return False
     if feedback["correct"]:
-        st.success(f"{t('mission_completed', language)}: {feedback['feedback']} (+1 {t('coins', language)})")
-        render_coin_reward_for_part(part_number, language, feedback)
-        st.markdown(
-            '<div class="reward-row">'
-            + reward_chip(f"+1 {t('coins', language)}")
-            + reward_chip(f"{t('badges', language)} +1")
-            + reward_chip(MISSION_FEEDBACK[part_number])
-            + "</div>",
-            unsafe_allow_html=True,
-        )
         return True
     st.error(f"{t('wrong_algorithm', language)}: {feedback['feedback']}")
     st.markdown(
@@ -622,7 +613,17 @@ def render_mission_intro(part_number, result, language, sheet_override, status=N
 
 def render_algorithm_analysis_sections(part_number, result, language, sheet_override, show_run_button=True):
     section_header(t("algorithm_decision", language), 5)
-    st.write("The chosen method matches the PPT and is kept unchanged in the core project.")
+    st.markdown(
+        f"""
+        <div class="section-card">
+            {badge(t('chosen_algorithm', language), 'complete')}
+            <div class="card-title">{PART_INFO[part_number]["algorithm"]}</div>
+            <div class="card-small">{ALGORITHM_DECISIONS[part_number]}</div>
+            <div class="card-small">{t('official_layer_note', language)}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     section_header(t("candidate_algorithms", language), 6)
     render_candidate_algorithms(part_number)
@@ -731,13 +732,13 @@ def render_challenge_part_page(part_number, language, sheet_override):
     st.session_state.nav_index = part_number
     render_progress_strip(language)
 
-    if status == "LOCKED":
+    if status == "PENDING":
         previous = part_number - 1
         st.markdown(
             card_html(
                 part_label(part_number, language),
-                f"This mission is locked. Complete Part {previous} first.",
-                status="LOCKED",
+                f"This part is pending. Complete Part {previous} first.",
+                status="PENDING",
                 key_result=MISSION_OUTCOMES[part_number],
             ),
             unsafe_allow_html=True,
@@ -768,7 +769,6 @@ def render_challenge_part_page(part_number, language, sheet_override):
         and recent_feedback.get("correct")
         and st.session_state.pop("celebrate_part", None) == part_number
     ):
-        st.success(f"{t('mission_completed', language)}: {recent_feedback['feedback']} (+1 {t('coins', language)})")
         render_coin_reward_for_part(part_number, language, recent_feedback)
 
     render_algorithm_analysis_sections(part_number, result, language, sheet_override, show_run_button=False)

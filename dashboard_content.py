@@ -1,4 +1,4 @@
-"""Presentation metadata for the Cypher Nexus Streamlit dashboard.
+"""Dashboard metadata for the Cypher Nexus Streamlit dashboard.
 
 This file contains only dashboard copy and analysis metadata. Official
 algorithms, dataset loading, and saved outputs remain in cypher_nexus_project.py.
@@ -88,47 +88,47 @@ MISSION_OUTCOMES = {
 }
 
 MISSION_FEEDBACK = {
-    1: "Layer disabled: harbour route mapped.",
-    2: "Registry filtered: double-agent risk exposed.",
-    3: "Protocol weakened: checkpoint plan locked.",
-    4: "Probability trap cleared: route decision defended.",
-    5: "Signal secured: fragment chain restored.",
-    6: "Countdown stabilized: urgent events prioritized.",
-    7: "Prediction loop disrupted: sector choice randomized.",
-    8: "Silent code traced: dangerous messages ranked.",
+    1: "Route computed: harbour path mapped.",
+    2: "Registry checked: suspicious identity risk exposed.",
+    3: "Checkpoint plan selected under resource limits.",
+    4: "Route decision computed with weighted criteria.",
+    5: "Signal sequence reconstructed.",
+    6: "Urgent event order prioritized.",
+    7: "Sector selected with controlled randomness.",
+    8: "Trigger messages detected and ranked.",
 }
 
 MISSION_STORIES = {
-    1: "The team enters the harbour network and must cross without choosing a route that looks short but exposes the mission.",
-    2: "The registry contains hidden identity overlaps; the mission needs proof that suspicious agents are not just exact duplicates.",
-    3: "Resources are limited, so the lockdown must pick the checkpoints that give the strongest impact under strict caps.",
-    4: "Several routes look possible, but uncertainty means the decision must balance reward, time, and multiple risk sources.",
-    5: "The activation signal is split across fragments; useful delayed pieces must be recovered instead of discarded too early.",
-    6: "The countdown stream is noisy. The team must sort urgent alerts by priority, timestamp, launch relevance, and stable arrival order.",
-    7: "The enemy predicts repeated optimal moves, so the escape sector must be selected with controlled randomness.",
-    8: "Final intercepted messages may contain trigger phrases; the mission must expose and rank the most dangerous message.",
+    1: "The harbour route dataset must be solved without choosing a path that is short but too risky.",
+    2: "The identity registry contains exact duplicates and near-alias overlaps that need a combined verification method.",
+    3: "The checkpoint dataset has limited energy, time, and token budgets, so the selected subset must maximize impact under constraints.",
+    4: "The route options contain uncertainty, so the decision must balance reward, time, and multiple risk sources.",
+    5: "The activation sequence is split across fragments; useful delayed pieces must be recovered instead of discarded too early.",
+    6: "The countdown stream is noisy. Events must be sorted by priority, timestamp, launch relevance, and stable arrival order.",
+    7: "Repeated deterministic choices are predictable, so the sector selection uses controlled randomness while respecting risk.",
+    8: "Intercepted messages may contain trigger phrases; the output must detect and rank the highest-risk messages.",
 }
 
 MISSION_STORY_TRANSLATIONS = {
     "中文": {
-        1: "小组进入港口网络，必须避开看似最短但暴露风险过高的路线。",
-        2: "档案中隐藏着身份重叠，任务需要证明可疑代理不只是完全重复项。",
-        3: "资源有限，封锁方案必须在严格限制内选择影响最大的检查点。",
+        1: "港口路线数据集需要避免选择看似最短但风险暴露过高的路线。",
+        2: "身份档案中同时存在精确重复和近似别名，需要组合验证方法。",
+        3: "检查点数据受到能量、时间和令牌限制，必须在约束内选择影响最大的子集。",
         4: "多条路线都可行，但不确定性要求同时权衡奖励、时间和多种风险。",
         5: "激活信号被拆成多个片段，仍可恢复的延迟片段不能过早丢弃。",
         6: "倒计时事件流很混乱，必须按优先级、时间、发射相关性和稳定到达顺序排序。",
-        7: "敌方会预测重复的最优行动，因此逃离区域需要受控随机化。",
-        8: "最终拦截消息可能包含触发短语，任务必须找出并排序最危险的信息。",
+        7: "重复的确定性选择容易被预测，因此区域选择需要在风险约束下进行受控随机化。",
+        8: "拦截消息可能包含触发短语，输出需要检测并排序最高风险的信息。",
     },
     "Bahasa Melayu": {
-        1: "Pasukan memasuki rangkaian pelabuhan dan perlu mengelak laluan pendek yang terlalu terdedah.",
-        2: "Daftar menyembunyikan pertindihan identiti; misi memerlukan bukti selain pendua tepat.",
-        3: "Sumber terhad, jadi pelan sekatan mesti memilih checkpoint berimpak tinggi dalam had ketat.",
+        1: "Dataset laluan pelabuhan perlu mengelak laluan pendek yang terlalu berisiko.",
+        2: "Daftar identiti mengandungi pendua tepat dan alias hampir sama, jadi kaedah pengesahan gabungan diperlukan.",
+        3: "Dataset checkpoint mempunyai had tenaga, masa dan token, jadi subset berimpak tinggi perlu dipilih dalam kekangan.",
         4: "Beberapa laluan boleh digunakan, tetapi ketidakpastian menuntut imbangan ganjaran, masa dan risiko.",
         5: "Isyarat aktivasi terpisah kepada fragmen; fragmen tertunda yang masih berguna tidak boleh dibuang terlalu awal.",
         6: "Aliran kiraan detik bercampur; acara perlu diisih mengikut prioriti, masa, kaitan pelancaran dan susunan stabil.",
-        7: "Musuh meramal gerakan optimum berulang, jadi sektor keluar dipilih dengan rawakan terkawal.",
-        8: "Mesej pintasan akhir mungkin mengandungi frasa pencetus; misi mesti mendedahkan mesej paling berbahaya.",
+        7: "Pilihan deterministik berulang mudah diramal, jadi pemilihan sektor menggunakan rawakan terkawal dengan risiko masih dikira.",
+        8: "Mesej pintasan mungkin mengandungi frasa pencetus; output perlu mengesan dan menyusun mesej berisiko tinggi.",
     },
 }
 
@@ -152,6 +152,17 @@ WHY_IT_MATTERS = {
     6: "This turns a noisy event feed into an ordered action list that can be defended field by field.",
     7: "This explains how the team stays less predictable without ignoring risk and decoy value.",
     8: "This connects phrase matching to final threat priority, so the output supports mission action instead of just text search.",
+}
+
+ALGORITHM_DECISIONS = {
+    1: "Modified Risk-Aware Dijkstra is selected because the route score must combine distance, risk, detection exposure, and blocked-route filtering.",
+    2: "Two-stage hybrid verification is selected because exact hash evidence and near-alias distance evidence answer different parts of the identity-matching problem.",
+    3: "Dynamic Programming Knapsack is selected because checkpoint value depends on combinations under three resource limits, not on a single greedy metric.",
+    4: "MCDA Weighted Scoring is selected because the route decision must keep reward, time, and risk trade-offs visible.",
+    5: "Dynamic Programming is selected because signal fragments can be delayed or skipped, so the best reconstruction depends on previous states.",
+    6: "Modified Stable Merge Sort is selected because the event stream needs a stable multi-field order: priority, timestamp, launch relevance, then original index.",
+    7: "Controlled Randomisation is selected because the output should be less predictable while still using risk and decoy evidence.",
+    8: "Brute Force String Matching plus ranking is selected because phrase detection must stay transparent and then be converted into threat priority.",
 }
 
 DEFENSE_NOTES = {
@@ -182,23 +193,23 @@ DEFENSE_NOTES = {
     ],
     7: [
         "Controlled randomness reduces predictability without ignoring risk.",
-        "Fixed seed makes the demo repeatable for presentation.",
+        "Fixed seed makes the randomized selection reproducible.",
     ],
     8: [
         "Brute force is transparent and easy to defend for multi-word phrase scanning.",
-        "Ranking links detection results to mission urgency.",
+        "Ranking links detection results to threat priority.",
     ],
 }
 
 MISSION_FORWARD = {
-    1: "The team reaches the next intelligence layer with a route that balances safety and speed.",
-    2: "The suspicious registry points toward the operational support chain.",
-    3: "The selected checkpoints weaken the enemy system before the route decision.",
-    4: "The chosen route moves the team through uncertainty with a defensible trade-off.",
-    5: "The reconstructed signal reveals the next active control layer.",
-    6: "The sorted event feed tells the team which alerts to handle first under countdown pressure.",
-    7: "Controlled randomness breaks the enemy's prediction pattern.",
-    8: "Threat ranking reveals the most dangerous message and final trigger evidence.",
+    1: "The project gains a route result that balances safety and speed.",
+    2: "The registry evidence supports the next identity-risk decision.",
+    3: "The selected checkpoints show how resource limits shape the optimal subset.",
+    4: "The chosen route makes the uncertainty trade-off visible and defendable.",
+    5: "The reconstructed sequence provides a clear ordered output for the next step.",
+    6: "The sorted event feed shows which alerts should be handled first under countdown pressure.",
+    7: "Controlled randomness reduces predictability while keeping risk in the scoring model.",
+    8: "Threat ranking identifies the most important message evidence.",
 }
 
 RESULT_KEYS = {
@@ -249,6 +260,7 @@ DEFENSE_MATRIX_COLUMNS = [
     "Chosen Algorithm",
     "Key Output",
     "Complexity",
+    "Defense Notes",
 ]
 
 
@@ -295,6 +307,7 @@ def build_defense_matrix_rows(results=None):
                 "Chosen Algorithm": PART_INFO[part_number]["algorithm"],
                 "Key Output": key_output_for_part(part_number, result),
                 "Complexity": PART_INFO[part_number]["complexity"],
+                "Defense Notes": " / ".join(DEFENSE_NOTES[part_number]),
             }
         )
     return rows

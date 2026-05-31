@@ -1,5 +1,6 @@
 """Reusable Streamlit UI components for the Cypher Nexus dashboard."""
 
+from html import escape
 import streamlit as st
 
 
@@ -65,7 +66,6 @@ def inject_css():
             padding: 16px;
             margin-bottom: 12px;
             box-shadow: 0 10px 24px rgba(0, 0, 0, .18);
-            animation: panelFadeIn .22s ease-out both;
         }
         .mission-card:hover {
             border-color: rgba(126, 231, 219, .45);
@@ -130,13 +130,13 @@ def inject_css():
             font-weight: 900;
             letter-spacing: .08em;
             text-transform: uppercase;
-            margin-top: 18px;
+            margin-top: 30px;
         }
         .section-title {
             color: #ffffff;
             font-size: 1.24rem;
             font-weight: 900;
-            margin: 0 0 10px;
+            margin: 0 0 14px;
         }
         .chosen-box {
             border-left: 4px solid #7ee7db;
@@ -195,12 +195,13 @@ def inject_css():
             align-items: center;
             gap: 8px;
             border: 1px solid rgba(255, 207, 92, .36);
-            background: rgba(255, 207, 92, .10);
+            background: rgba(255, 207, 92, .075);
             border-radius: 999px;
-            padding: 6px 11px;
+            padding: 5px 10px;
             color: #ffe09a;
             font-weight: 800;
-            font-size: .86rem;
+            font-size: .78rem;
+            text-transform: uppercase;
         }
         .reward-dot {
             width: 14px;
@@ -212,80 +213,139 @@ def inject_css():
         .coin-reward-panel {
             position: relative;
             overflow: hidden;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 176px;
+            gap: 18px;
+            align-items: center;
             border: 1px solid rgba(255, 207, 92, .46);
             background:
                 radial-gradient(circle at 15% 25%, rgba(255, 207, 92, .20), transparent 28%),
                 linear-gradient(135deg, rgba(43, 34, 12, .86), rgba(9, 32, 39, .92));
             border-radius: 8px;
-            padding: 18px 18px 16px;
+            padding: 18px;
             margin: 12px 0;
             box-shadow: 0 16px 38px rgba(0, 0, 0, .28), 0 0 28px rgba(255, 207, 92, .10);
-            animation: rewardPop .34s cubic-bezier(.2, .9, .25, 1.15) both;
+            animation: rewardPanelEnter .28s cubic-bezier(.2, .9, .25, 1.08) both;
         }
         .coin-reward-panel:after {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,.12) 45%, transparent 68%);
+            background: linear-gradient(105deg, transparent 22%, rgba(255,255,255,.10) 46%, transparent 70%);
             transform: translateX(-100%);
-            animation: panelSweep 1.25s ease-out both;
+            animation: panelSweep .82s ease-out both;
             pointer-events: none;
         }
-        .coin-reward-topline {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
+        .coin-reward-copy {
             position: relative;
             z-index: 1;
         }
-        .coin-stack {
-            position: relative;
-            width: 68px;
-            height: 68px;
-            flex: 0 0 68px;
+        .coin-reward-eyebrow {
+            color: #ffdf85;
+            font-size: .76rem;
+            font-weight: 900;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
         }
-        .coin-main, .coin-orbit {
-            position: absolute;
-            border-radius: 999px;
-            background: radial-gradient(circle at 34% 28%, #fff7c7 0%, #ffcf5c 45%, #b97919 100%);
-            border: 1px solid rgba(255, 246, 191, .75);
-            box-shadow: 0 0 18px rgba(255, 207, 92, .38);
-        }
-        .coin-main {
-            inset: 12px;
-            display: grid;
-            place-items: center;
-            color: #2e1d04;
-            font-weight: 1000;
-            animation: coinPulse .8s ease-out both;
-        }
-        .coin-orbit {
-            width: 18px;
-            height: 18px;
-            opacity: .95;
-            animation: coinOrbit .95s ease-out both;
-        }
-        .coin-orbit:nth-child(2) { left: 4px; top: 8px; animation-delay: .02s; }
-        .coin-orbit:nth-child(3) { right: 2px; top: 4px; animation-delay: .08s; }
-        .coin-orbit:nth-child(4) { right: 7px; bottom: 6px; animation-delay: .14s; }
         .coin-reward-title {
             color: #fff7d1;
-            font-size: 1.16rem;
+            font-size: 1.34rem;
             font-weight: 950;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
         }
         .coin-reward-message {
             color: #d9e7e7;
             font-size: .92rem;
+            line-height: 1.45;
         }
         .coin-meter {
-            color: #ffdf85;
-            font-size: .9rem;
-            font-weight: 900;
-            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
             position: relative;
             z-index: 1;
+        }
+        .coin-stage {
+            position: relative;
+            z-index: 1;
+            height: 112px;
+            min-width: 160px;
+        }
+        .coin-flight {
+            position: absolute;
+            left: 8px;
+            top: 14px;
+            width: 56px;
+            height: 56px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 34% 28%, #fff7c7 0%, #ffcf5c 45%, #b97919 100%);
+            border: 1px solid rgba(255, 246, 191, .75);
+            box-shadow: 0 0 18px rgba(255, 207, 92, .38);
+            display: grid;
+            place-items: center;
+            color: #2e1d04;
+            font-weight: 1000;
+            animation: coinFlyToVault .94s cubic-bezier(.18, .82, .18, 1) both;
+            will-change: transform, opacity;
+        }
+        .coin-flight:after {
+            content: "";
+            position: absolute;
+            inset: 13px 18px;
+            border-left: 2px solid rgba(90, 53, 5, .62);
+            border-right: 2px solid rgba(255, 250, 203, .55);
+            border-radius: 999px;
+        }
+        .coin-spark {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #fff4b3;
+            box-shadow: 0 0 10px rgba(255, 207, 92, .72);
+            opacity: 0;
+            animation: sparkFlash .62s ease-out both;
+        }
+        .coin-spark-a { left: 26px; top: 2px; animation-delay: .08s; }
+        .coin-spark-b { left: 64px; top: 28px; animation-delay: .18s; }
+        .coin-spark-c { left: 88px; top: 66px; animation-delay: .28s; }
+        .reward-vault {
+            position: absolute;
+            right: 8px;
+            bottom: 4px;
+            width: 86px;
+            height: 76px;
+            border: 1px solid rgba(126, 231, 219, .26);
+            border-radius: 8px 8px 12px 12px;
+            background:
+                linear-gradient(180deg, rgba(126, 231, 219, .18), transparent 22%),
+                linear-gradient(135deg, rgba(9, 25, 35, .96), rgba(31, 34, 20, .94));
+            box-shadow: inset 0 0 18px rgba(126, 231, 219, .10), 0 12px 24px rgba(0, 0, 0, .22);
+            animation: vaultCatch .94s ease-out both;
+        }
+        .reward-vault:before {
+            content: "";
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            top: 13px;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, .42);
+            border: 1px solid rgba(255, 207, 92, .30);
+        }
+        .reward-vault:after {
+            content: "";
+            position: absolute;
+            left: 28px;
+            right: 28px;
+            bottom: 17px;
+            height: 15px;
+            border-radius: 999px;
+            background: radial-gradient(circle at center, rgba(255, 207, 92, .68), rgba(255, 207, 92, .08));
+            opacity: .78;
         }
         .badge-list {
             display: flex;
@@ -317,7 +377,7 @@ def inject_css():
             from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes rewardPop {
+        @keyframes rewardPanelEnter {
             from { opacity: 0; transform: translateY(8px) scale(.985); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
@@ -325,18 +385,43 @@ def inject_css():
             0% { transform: translateX(-110%); }
             70%, 100% { transform: translateX(110%); }
         }
-        @keyframes coinPulse {
-            0% { transform: scale(.7) rotate(-12deg); }
-            70% { transform: scale(1.08) rotate(4deg); }
-            100% { transform: scale(1) rotate(0); }
+        @keyframes coinFlyToVault {
+            0% { opacity: 0; transform: translate(-8px, 18px) scale(.62) rotate(-18deg); }
+            18% { opacity: 1; transform: translate(0, 0) scale(1.18) rotate(8deg); }
+            62% { opacity: 1; transform: translate(62px, 16px) scale(.98) rotate(210deg); }
+            84% { opacity: 1; transform: translate(92px, 43px) scale(.66) rotate(338deg); }
+            100% { opacity: 0; transform: translate(99px, 51px) scale(.30) rotate(390deg); }
         }
-        @keyframes coinOrbit {
-            from { opacity: 0; transform: translateY(8px) scale(.5); }
-            to { opacity: .95; transform: translateY(0) scale(1); }
+        @keyframes sparkFlash {
+            0% { opacity: 0; transform: translate(0, 8px) scale(.4); }
+            34% { opacity: .95; transform: translate(0, 0) scale(1); }
+            100% { opacity: 0; transform: translate(8px, -12px) scale(.2); }
+        }
+        @keyframes vaultCatch {
+            0%, 64% { transform: scale(1); box-shadow: inset 0 0 18px rgba(126, 231, 219, .10), 0 12px 24px rgba(0, 0, 0, .22); }
+            78% { transform: scale(1.035); box-shadow: inset 0 0 22px rgba(255, 207, 92, .18), 0 0 24px rgba(255, 207, 92, .18); }
+            100% { transform: scale(1); box-shadow: inset 0 0 18px rgba(126, 231, 219, .10), 0 12px 24px rgba(0, 0, 0, .22); }
         }
         @media (max-width: 760px) {
             .mission-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .mission-hero h1 { font-size: 1.85rem; }
+            .coin-reward-panel { grid-template-columns: 1fr; }
+            .coin-stage { width: 176px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .mission-card,
+            .result-card,
+            .section-card,
+            .feedback-card,
+            .coin-reward-panel,
+            .coin-reward-panel:after,
+            .coin-flight,
+            .coin-spark,
+            .reward-vault {
+                animation: none !important;
+                transform: none !important;
+            }
+            .coin-flight { opacity: 1; }
         }
         </style>
         """,
@@ -351,7 +436,7 @@ def badge(text, kind="muted"):
 def status_badge_kind(status):
     if status == "COMPLETED":
         return "complete"
-    if status == "LOCKED":
+    if status in {"LOCKED", "PENDING"}:
         return "locked"
     return "ready"
 
@@ -390,24 +475,33 @@ def coin_reward_panel_html(
     coins,
     badge_label,
     result_label,
-    wallet_label="Wallet",
-    badge_prefix="Badge",
+    wallet_label="Reward Vault",
+    badge_prefix="Evidence Mark",
 ):
+    safe_title = escape(str(title))
+    safe_message = escape(str(message))
+    safe_badge_label = escape(str(badge_label))
+    safe_result_label = escape(str(result_label))
+    safe_wallet_label = escape(str(wallet_label))
+    safe_badge_prefix = escape(str(badge_prefix))
+    safe_coins = escape(str(coins))
     return f"""
-    <div class="coin-reward-panel">
-        <div class="coin-reward-topline">
-            <div>
-                {badge("+1", "ready")}
-                <div class="coin-reward-title">{title}</div>
-                <div class="coin-reward-message">{message}</div>
-                <div class="coin-meter">{result_label} | {wallet_label}: {coins} | {badge_prefix}: {badge_label}</div>
+    <div class="coin-reward-panel" role="status" aria-live="polite">
+        <div class="coin-reward-copy">
+            <div class="coin-reward-eyebrow">{safe_title}</div>
+            <div class="coin-reward-title">+1 {safe_result_label}</div>
+            <div class="coin-reward-message">{safe_message}</div>
+            <div class="coin-meter">
+                {reward_chip(f"{safe_wallet_label}: {safe_coins}")}
+                {reward_chip(f"{safe_badge_prefix}: {safe_badge_label}")}
             </div>
-            <div class="coin-stack" aria-hidden="true">
-                <span class="coin-main">+1</span>
-                <span class="coin-orbit"></span>
-                <span class="coin-orbit"></span>
-                <span class="coin-orbit"></span>
-            </div>
+        </div>
+        <div class="coin-stage" aria-hidden="true">
+            <span class="coin-flight">+1</span>
+            <span class="coin-spark coin-spark-a"></span>
+            <span class="coin-spark coin-spark-b"></span>
+            <span class="coin-spark coin-spark-c"></span>
+            <span class="reward-vault"></span>
         </div>
     </div>
     """
