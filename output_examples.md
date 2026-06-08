@@ -122,6 +122,15 @@ Detected phrases: silent code, shadow key, final protocol
 Route tag: GRID-HUB-B2
 ```
 
+## Part 9
+
+```text
+Maximum Disruption Achieved with total operational impact 46
+Derived from: Part 1 route, Part 2 access evidence, Part 3 selected targets, Part 8 threat ranking
+Selected targets: Disable Camera Grid, Jam Patrol Drone Relay, Disrupt Escape Route Beacon, Upload False Navigation Beacon
+Final effects: surveillance coverage, patrol coordination, and communication routing are disrupted
+```
+
 ## Generated Files
 
 Important TXT files:
@@ -135,6 +144,7 @@ outputs/part5_split_signal_protocol.txt
 outputs/part6_countdown_sequence.txt
 outputs/part7_phantom_dice.txt
 outputs/part8_silent_code.txt
+outputs/part9_maximum_disruption_strategy.txt
 outputs/data_mapping_report.txt
 ```
 
@@ -147,6 +157,9 @@ outputs/part4_probability_trap_route_scores.csv
 outputs/part6_countdown_sequence_top_five.csv
 outputs/part7_phantom_dice_sector_scores.csv
 outputs/part8_silent_code_ranked_messages.csv
+outputs/part9_maximum_disruption_strategy_selected_targets.csv
+outputs/part9_maximum_disruption_strategy_top_threats.csv
+outputs/part9_maximum_disruption_strategy_strategy_steps.csv
 ```
 
 ## Dashboard View
@@ -163,8 +176,8 @@ The landing page shows:
 Operation Cypher Nexus: The Final Protocol
 Algorithmic Mission Control Dashboard
 Sequential review progress, reward tokens, and evidence marks
-8 part cards with PENDING / READY / COMPLETED status
-Defense Matrix covering Parts 1-8
+9 part cards with PENDING / READY / COMPLETED status
+Defense Matrix covering Parts 1-9
 ```
 
 Sequential Review Mode shows three algorithm choices per Part. An alternative choice shows the rejection reason and does not unlock or overwrite official outputs. A correct choice marks the Part completed, awards one reward token/evidence mark, runs the official Part runner, and makes the result available.
@@ -173,7 +186,7 @@ Direct Demo Mode provides:
 
 ```text
 Run All / Show All Results
-All Parts 1-8 results without algorithm-selection steps
+All Parts 1-9 results without algorithm-selection steps
 ```
 
 Helpful dashboard charts:
@@ -185,6 +198,7 @@ Part 4: route final score chart
 Part 6: urgent-event priority chart plus original/sorted/top-5 tables
 Part 7: sector probability chart
 Part 8: threat score chart
+Part 9: selected-target impact chart and final strategy tables
 ```
 
 Each Part page follows:

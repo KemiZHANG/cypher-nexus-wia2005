@@ -44,6 +44,12 @@ The program calculates risk from patrol frequency, thermal scan level, drone cov
 
 The scanner manually checks each trigger phrase against every possible position in each message. Detected phrases add weighted threat points, and route tags add an intelligence bonus. Messages are ranked by final threat score and saved as TXT and CSV.
 
+## Part 9: Maximum Disruption Strategy
+
+Part 9 is the creative ending required by the project brief. It does not introduce a new dataset file. Instead, it synthesizes previous official outputs: Part 1 route access, Part 2 suspicious access evidence, Part 3 dynamic-programming target selection, and Part 8 threat ranking.
+
+The chosen method is Integrated DP Final Strategy. Narrative-only ending is rejected because it is not tied to evidence. Greedy highest-threat selection is rejected because it ignores the resource constraints already handled by Part 3. The output shows the final phase plan, top threats, selected targets, resource usage, final effects, and saved TXT/CSV evidence.
+
 ## Streamlit Mission-Control Dashboard
 
 `streamlit_app.py` is an optional visualization layer. It imports and reuses `cypher_nexus_project.py`, displays the same algorithm explanations, and shows tables and simple charts for review. It does not replace the CLI or duplicate the core algorithm logic. Dashboard copy and group-wide metadata are kept in `dashboard_content.py`, reusable UI pieces are kept in `dashboard_components.py`, and language text is kept in `dashboard_i18n.py`.
@@ -52,12 +58,12 @@ The dashboard uses a professional Cyber Mission Control style: landing page, par
 
 Sequential Review Mode adds algorithm-choice prompts, PENDING / READY / COMPLETED progression, reward tokens, evidence marks, and final completion feedback. These are stored in Streamlit `session_state` and do not move, duplicate, or change algorithm logic. Alternative choices explain why the selected algorithm was rejected. Correct choices call the existing official runner for that Part, award one reward token/evidence mark, and make the result available.
 
-Direct Demo Mode provides `Run All / Show All Results` when the group wants to skip the sequential review flow and display Parts 1-8 immediately.
+Direct Demo Mode provides `Run All / Show All Results` when the group wants to skip the sequential review flow and display Parts 1-9 immediately.
 
-The polished dashboard keeps a consistent defense order for all Parts: Key Takeaway, Why it matters, Mission Brief, Dataset Used, Algorithm Decision, Candidate Algorithms, Rejected Algorithms, Chosen Algorithm, Key Result, Visualization, Time and Space Complexity, Defense Notes, and How this result moves the mission forward. Charts are added only where they clarify the algorithm result: suspicion scores, resource usage, route scores, urgent event priority, sector probabilities, and threat scores.
+The polished dashboard keeps a consistent defense order for all Parts: Key Takeaway, Why it matters, Mission Brief, Dataset Used, Algorithm Decision, Candidate Algorithms, Rejected Algorithms, Chosen Algorithm, Key Result, Visualization, Time and Space Complexity, Defense Notes, and How this result moves the mission forward. Charts are added only where they clarify the algorithm result: suspicion scores, resource usage, route scores, urgent event priority, sector probabilities, threat scores, and Part 9 target impact.
 
-The final completion page confirms all 8 Parts completed, total reward tokens/evidence marks, final project summary, View All Outputs, and Restart Review.
+The final completion page confirms all 9 Parts completed, total reward tokens/evidence marks, final project summary, View All Outputs, and Restart Review.
 
-The Defense Matrix summarizes Part, Dataset, Problem Type, Candidate Algorithms, Rejected Algorithms, Chosen Algorithm, Key Output, Complexity, and Defense Notes for Parts 1-8. This is the main group-project evidence page, so the dashboard does not appear to focus only on Part 6.
+The Defense Matrix summarizes Part, Dataset or synthesis source, Problem Type, Candidate Algorithms, Rejected Algorithms, Chosen Algorithm, Key Output, Complexity, and Defense Notes for Parts 1-9. This is the main group-project evidence page, so the dashboard does not appear to focus only on Part 6.
 
-Every Part page follows the same defense-friendly structure. Part 6 remains clear with original order, sorted order, top 5 urgent events, sorting key explanation, manual merge sort confirmation, and stable sorting notes, but the same evidence structure is preserved for the other seven Parts.
+Every Part page follows the same defense-friendly structure. Part 6 remains clear with original order, sorted order, top 5 urgent events, sorting key explanation, manual merge sort confirmation, and stable sorting notes, and Part 9 clearly shows how the final ending is derived from earlier outputs.

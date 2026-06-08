@@ -1,0 +1,66 @@
+Part 9 - Maximum Disruption Strategy
+
+Mission Problem
+Synthesize earlier outputs into a final ending that targets the highest-impact systems under resource constraints.
+
+Algorithm Used
+Integrated DP Final Strategy
+
+Rejected Algorithms
+- Narrative-only ending is rejected because it does not connect the final decision to algorithm outputs.
+- Greedy highest-threat selection is rejected because it ignores energy, time, and token constraints from the target optimization stage.
+
+Dataset
+dataset file: Derived from Parts 1, 2, 3, and 8
+dataset source: Previous official outputs
+sheet name: N/A
+row count: 29
+columns used: Part1_Route, Part2_Access_Evidence, Part3_Selected_Targets, Part8_Threat_Ranking
+
+Key Result
+Maximum Disruption Achieved with total operational impact 46.
+
+Result Explanation
+Part 9 is a creative final ending that synthesizes earlier official outputs instead of introducing a new dataset.
+
+Time and Space Complexity
+Time O(t + p), space O(t + p) for t selected targets and p ranked threat messages after reusing earlier algorithm outputs.
+
+Detailed Output
+Input from Part 1:
+Route access: Port Authority Hub -> Warehouse A -> Safe House 1 -> Financial Vault Access
+
+Input from Part 2:
+Access evidence: A2876 / key T7Q1 / score 12
+
+Input from Part 8:
+Top threats identified:
+Rank | Message_ID | Threat_Score | Threat_Level | Route_Tag  
+-----+------------+--------------+--------------+------------
+1    | M04        | 7            | Critical     | GRID-HUB-B2
+2    | M07        | 5            | High         | None       
+3    | M08        | 4            | High         | CORE-LINK-7
+
+Resource constraints from Part 3:
+Energy: 15 / 15
+Time: 33 / 35
+Token: 4 / 4
+
+Selected disruption targets:
+Target                         | Energy | Time | Token | Impact | Purpose                           
+-------------------------------+--------+------+-------+--------+-----------------------------------
+Disable Camera Grid            | 3      | 8    | 1     | 11     | Surveillance coverage is disrupted
+Jam Patrol Drone Relay         | 5      | 11   | 1     | 14     | Patrol coordination is disrupted  
+Disrupt Escape Route Beacon    | 4      | 8    | 1     | 12     | Communication routing is disrupted
+Upload False Navigation Beacon | 3      | 6    | 1     | 9      | Communication routing is disrupted
+
+Mission synthesis:
+Phase                                    | Source                       | Decision                                                                               | Evidence                                                                   
+-----------------------------------------+------------------------------+----------------------------------------------------------------------------------------+----------------------------------------------------------------------------
+Phase 1 - Gain Access                    | Part 1 route access          | Use the safest computed route to enter the core chamber.                               | Port Authority Hub -> Warehouse A -> Safe House 1 -> Financial Vault Access
+Phase 2 - Exploit Internal Access        | Part 2 identity verification | Use suspicious access evidence to justify the internal bypass step.                    | A2876 / key T7Q1 / score 12                                                
+Phase 3 - Select High-Impact Targets     | Part 3 target optimization   | Reuse the DP-selected target subset under energy, time, and token limits.              | 4 targets, impact 46                                                       
+Phase 4 - Execute Coordinated Disruption | Part 8 threat ranking        | Prioritize the final ending around the highest-ranked trigger messages and route tags. | Messages M04, M07, M08; tags GRID-HUB-B2, CORE-LINK-7                      
+
+Final result:
+Maximum Disruption Achieved. Final effects: Surveillance coverage is disrupted; Patrol coordination is disrupted; Communication routing is disrupted. Mission complete.

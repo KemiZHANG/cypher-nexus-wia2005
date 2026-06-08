@@ -4,6 +4,8 @@ import unittest
 from cypher_nexus_project import (
     PART_INFO,
     RUNNERS_BY_PART,
+    TOTAL_PARTS,
+    build_maximum_disruption_strategy,
     build_standard_report,
     brute_force_phrase_match,
     format_data_mapping_report,
@@ -111,6 +113,40 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
         self.assertTrue(brute_force_phrase_match("final protocol", "activate the final protocol now"))
         self.assertFalse(brute_force_phrase_match("shadow key", "shadow gateway only"))
 
+    def test_part9_synthesizes_previous_outputs_into_final_strategy(self):
+        result = build_maximum_disruption_strategy(
+            part1_result={"route": ["Port Authority Hub", "Warehouse A", "Core Chamber"]},
+            part2_result={
+                "suspicious_identities": [
+                    {"Agent_ID": "A2876", "Access_Key": "T7Q1", "Suspicion_Score": 12}
+                ]
+            },
+            part3_result={
+                "selected_checkpoints": [
+                    {"Checkpoint": "Disable Camera Grid", "Energy": 3, "Time": 8, "Token": 1, "Impact": 11},
+                    {"Checkpoint": "Jam Patrol Drone Relay", "Energy": 5, "Time": 11, "Token": 1, "Impact": 14},
+                ],
+                "total_energy": 8,
+                "total_time": 19,
+                "total_tokens": 2,
+                "total_impact": 25,
+                "capacities": (15, 35, 4),
+            },
+            part8_result={
+                "ranked_messages": [
+                    {"Message_ID": "M04", "Threat_Score": 7, "Threat_Level": "Critical", "Route_Tag": "CORE-LINK-7"},
+                    {"Message_ID": "M08", "Threat_Score": 4, "Threat_Level": "High", "Route_Tag": "GRID-HUB-B2"},
+                ]
+            },
+        )
+
+        self.assertEqual(result["final_result"], "Maximum Disruption Achieved")
+        self.assertEqual(result["total_operational_impact"], 25)
+        self.assertEqual(result["resource_usage"]["Energy"], "8 / 15")
+        self.assertEqual([target["Target"] for target in result["selected_targets"]], ["Disable Camera Grid", "Jam Patrol Drone Relay"])
+        self.assertEqual(result["top_threats"][0]["Message_ID"], "M04")
+        self.assertIn("Part 1", result["strategy_steps"][0]["Source"])
+
     def test_standard_report_contains_required_presentation_sections(self):
         report = build_standard_report(
             6,
@@ -166,9 +202,11 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
         self.assertIn("Aliran kiraan detik", mission_story(6, "Bahasa Melayu"))
 
     def test_streamlit_mission_control_metadata_is_complete(self):
-        self.assertEqual(len(MISSION_OUTCOMES), 8)
-        self.assertEqual(len(CANDIDATE_ALGORITHMS), 8)
+        self.assertEqual(TOTAL_PARTS, 9)
+        self.assertEqual(len(MISSION_OUTCOMES), 9)
+        self.assertEqual(len(CANDIDATE_ALGORITHMS), 9)
         self.assertIn("Modified Stable Merge Sort", CANDIDATE_ALGORITHMS[6])
+        self.assertIn("Integrated DP Final Strategy", CANDIDATE_ALGORITHMS[9])
         self.assertEqual(
             RESULT_PAGE_SECTIONS,
             [
@@ -186,17 +224,17 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
                 "How this result moves the mission forward",
             ],
         )
-        self.assertEqual(HELPFUL_CHART_PARTS, {2, 3, 4, 6, 7, 8})
-        self.assertEqual(len(KEY_TAKEAWAYS), 8)
+        self.assertEqual(HELPFUL_CHART_PARTS, {2, 3, 4, 6, 7, 8, 9})
+        self.assertEqual(len(KEY_TAKEAWAYS), 9)
         cards = build_mission_cards({}, "English", completed_missions=set())
-        self.assertEqual(len(cards), 8)
+        self.assertEqual(len(cards), 9)
         self.assertEqual(cards[0]["status"], "READY")
         self.assertEqual(cards[1]["status"], "PENDING")
         self.assertIn("chosen_algorithm", cards[0])
-        self.assertEqual(len(ALGORITHM_DECISIONS), 8)
+        self.assertEqual(len(ALGORITHM_DECISIONS), 9)
 
     def test_dashboard_content_balances_all_parts_and_demo_flow(self):
-        for part_number in range(1, 9):
+        for part_number in range(1, TOTAL_PARTS + 1):
             with self.subTest(part=part_number):
                 self.assertEqual(len(CANDIDATE_ALGORITHMS[part_number]), 3)
                 self.assertGreaterEqual(len(PART_INFO[part_number]["rejected"]), 2)
@@ -225,8 +263,8 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
             ],
         )
         rows = build_defense_matrix_rows()
-        self.assertEqual(len(rows), 8)
-        self.assertEqual({row["Part"] for row in rows}, {f"Part {part}" for part in range(1, 9)})
+        self.assertEqual(len(rows), 9)
+        self.assertEqual({row["Part"] for row in rows}, {f"Part {part}" for part in range(1, TOTAL_PARTS + 1)})
         for row in rows:
             self.assertTrue(row["Dataset"])
             self.assertTrue(row["Candidate Algorithms"])
@@ -246,9 +284,10 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
             6: "Modified Stable Merge Sort",
             7: "Controlled Randomisation",
             8: "Brute Force String Matching + Threat Ranking",
+            9: "Integrated DP Final Strategy",
         }
 
-        self.assertEqual(set(ALGORITHM_CHOICES), set(range(1, 9)))
+        self.assertEqual(set(ALGORITHM_CHOICES), set(range(1, TOTAL_PARTS + 1)))
         for part_number, correct in expected_correct.items():
             self.assertEqual(ALGORITHM_CHOICES[part_number]["correct"], correct)
             self.assertEqual(len(ALGORITHM_CHOICES[part_number]["options"]), 3)
@@ -314,7 +353,7 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
         self.assertIn("Part 1 Evidence Mark", html)
 
     def test_cli_contract_for_required_commands_is_still_available(self):
-        self.assertEqual(set(RUNNERS_BY_PART), set(range(1, 9)))
+        self.assertEqual(set(RUNNERS_BY_PART), set(range(1, TOTAL_PARTS + 1)))
 
         all_args = parse_args(["--all"])
         self.assertTrue(all_args.all)
@@ -322,6 +361,9 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
         part_args = parse_args(["--part", "6", "--sheet", "B"])
         self.assertEqual(part_args.part, 6)
         self.assertEqual(part_args.sheet, "B")
+
+        part9_args = parse_args(["--part", "9"])
+        self.assertEqual(part9_args.part, 9)
 
         list_args = parse_args(["--list-data"])
         self.assertTrue(list_args.list_data)

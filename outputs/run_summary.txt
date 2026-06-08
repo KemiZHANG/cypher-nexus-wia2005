@@ -63,3 +63,11 @@ Row count: 8
 Columns used: Message_ID, Text_Stream, Route_Tag
 TXT output: outputs\part8_silent_code.txt
 CSV outputs: outputs\part8_silent_code_ranked_messages.csv
+
+Part 9: Maximum Disruption Strategy
+Dataset file: Derived from Parts 1, 2, 3, and 8
+Sheet name: N/A
+Row count: 29
+Columns used: Part1_Route, Part2_Access_Evidence, Part3_Selected_Targets, Part8_Threat_Ranking
+TXT output: outputs\part9_maximum_disruption_strategy.txt
+CSV outputs: outputs\part9_maximum_disruption_strategy_selected_targets.csv, outputs\part9_maximum_disruption_strategy_top_threats.csv, outputs\part9_maximum_disruption_strategy_strategy_steps.csv

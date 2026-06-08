@@ -8,7 +8,7 @@
 
 ## 主要文件
 
-- `cypher_nexus_project.py`：核心程序，包含 8 个 Part 的算法、数据读取、CLI 和输出保存。
+- `cypher_nexus_project.py`：核心程序，包含 9 个 Part 的算法/整合逻辑、数据读取、CLI 和输出保存。
 - `streamlit_app.py`：本地 Streamlit dashboard，复用核心程序函数，不复制算法逻辑。
 - `dashboard_content.py`：任务说明、候选算法、拒绝理由、关键结论、防守矩阵等展示内容。
 - `dashboard_components.py`：Streamlit UI 组件，例如卡片、徽章、金币奖励、数据集面板、任务日志。
@@ -30,6 +30,7 @@
 | 6 | The Countdown Sequence | Modified Stable Merge Sort |
 | 7 | The Phantom Dice | Controlled Randomisation |
 | 8 | The Silent Code | Brute Force String Matching + Threat Ranking |
+| 9 | Maximum Disruption Strategy | Integrated DP Final Strategy |
 
 ## 数据集
 
@@ -46,6 +47,7 @@
 |---|---|
 | 1 | C |
 | 2-8 | A |
+| 9 | Derived from Parts 1, 2, 3, and 8; no separate sheet |
 
 每个 Part 都会输出：
 
@@ -149,7 +151,7 @@ powershell -ExecutionPolicy Bypass -File .\run_dashboard_chrome.ps1
 看板功能：
 
 - 英文 / 中文 / Bahasa Melayu 三语切换
-- 8 个 Part 的任务卡
+- 9 个 Part 的任务卡
 - Sequential Review Mode：按顺序比较算法，选择正确算法后显示官方结果
 - Direct Demo Mode：快速显示官方输出
 - 数据集面板：文件、sheet、行数、使用列
@@ -212,7 +214,7 @@ The selected algorithms still follow the group PPT. The dashboard improves expla
 
 ## Main Files
 
-- `cypher_nexus_project.py`: core program for all 8 Parts, dataset loading, CLI, and saved outputs.
+- `cypher_nexus_project.py`: core program for all 9 Parts, dataset loading, CLI, and saved outputs.
 - `streamlit_app.py`: local Streamlit dashboard that imports and reuses `cypher_nexus_project.py`.
 - `dashboard_content.py`: mission metadata, candidate algorithms, rejection reasons, key takeaways, and Defense Matrix content.
 - `dashboard_components.py`: reusable Streamlit UI components such as cards, badges, reward-vault animation, dataset panels, and execution logs.
@@ -234,6 +236,7 @@ The selected algorithms still follow the group PPT. The dashboard improves expla
 | 6 | The Countdown Sequence | Modified Stable Merge Sort |
 | 7 | The Phantom Dice | Controlled Randomisation |
 | 8 | The Silent Code | Brute Force String Matching + Threat Ranking |
+| 9 | Maximum Disruption Strategy | Integrated DP Final Strategy |
 
 ## Dataset
 
@@ -250,6 +253,7 @@ Default sheets:
 |---|---|
 | 1 | C |
 | 2-8 | A |
+| 9 | Derived from Parts 1, 2, 3, and 8; no separate sheet |
 
 Every Part prints the dataset file, sheet name, row count, and columns used. The generated `outputs/data_mapping_report.txt` shows how original dataset columns map to algorithm fields.
 
@@ -346,7 +350,7 @@ powershell -ExecutionPolicy Bypass -File .\run_dashboard_chrome.ps1
 Dashboard features:
 
 - English / 中文 / Bahasa Melayu language selector
-- 8 mission cards
+- 9 mission cards
 - Sequential Review Mode: compare algorithms in order before the official result appears
 - Direct Demo Mode: quickly show official outputs
 - dataset file, sheet, row count, and columns used

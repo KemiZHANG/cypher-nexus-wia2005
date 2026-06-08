@@ -2,13 +2,14 @@
 
 ## Opening
 
-Good day everyone. We are Group 8, and our project is Operation Cypher Nexus: The Final Protocol. The mission is divided into eight algorithmic stages. Our Python program reads the real dataset, runs each selected algorithm, and prints a standard explanation for each Part.
+Good day everyone. We are Group 8, and our project is Operation Cypher Nexus: The Final Protocol. The mission is divided into eight dataset-driven algorithmic stages plus a final Part 9 creative synthesis. Our Python program reads the real dataset, runs each selected algorithm, and prints a standard explanation for each Part.
 
 During the demo, run the CLI first:
 
 ```bash
 python cypher_nexus_project.py --all
 python cypher_nexus_project.py --part 6
+python cypher_nexus_project.py --part 9
 python cypher_nexus_project.py --list-data
 ```
 
@@ -31,11 +32,12 @@ Suggested dashboard flow:
 1. Run CLI `--all` to generate official TXT/CSV outputs.
 2. Show `--list-data` evidence for dataset files, sheets, rows, and columns.
 3. Open the dashboard and show the mission overview.
-4. Show the Defense Matrix to prove all 8 Parts have dataset evidence, candidate algorithms, rejected algorithms, chosen algorithms, outputs, and complexity.
+4. Show the Defense Matrix to prove all 9 Parts have dataset or synthesis evidence, candidate algorithms, rejected algorithms, chosen algorithms, outputs, and complexity.
 5. Use `Sequential Review Mode` and intentionally choose one alternative algorithm to show the rejection reason.
 6. Choose the correct PPT algorithm to show the reward-vault animation, award one reward token/evidence mark, run the official output, and make the result available.
 7. Use `Direct Demo Mode` when the teacher wants to skip the sequential review and press `Run All / Show All Results`.
 8. Explain one assigned Part in detail while still reminding the teacher that every Part follows the same group-wide evidence structure.
+9. End with Part 9 to show how the route, access evidence, optimized targets, and threat ranking combine into the final creative ending.
 
 After each mission, point to the same defense order: Key Takeaway, Why it matters, Mission Brief, Dataset Used, Algorithm Decision, Candidate Algorithms, Rejected Algorithms, Chosen Algorithm, Key Result, Visualization, Complexity, Defense Notes, and mission-forward explanation.
 
@@ -111,7 +113,7 @@ Dashboard flow for Part 6:
 9. Use the urgent-event chart as a quick visual summary, then return to the tables for evidence.
 10. Use the Defense Notes to explain why stable sorting matters and why Python `sorted()` is not the main algorithm.
 
-When explaining the whole group project, do not jump only to Part 6. First use the Defense Matrix or Direct Demo Mode to show Parts 1-8 are complete, then zoom into Part 6 as ZHANG YIMING's assigned section.
+When explaining the whole group project, do not jump only to Part 6. First use the Defense Matrix or Direct Demo Mode to show Parts 1-9 are complete, then zoom into Part 6 as ZHANG YIMING's assigned section.
 
 ## Part 7: The Phantom Dice
 
@@ -121,6 +123,10 @@ Mission problem: avoid predictable movement. Controlled randomisation calculates
 
 Mission problem: scan intercepted messages for trigger phrases and rank danger. We use manual brute force string matching because it is simple, explainable, and supports multi-word phrases.
 
+## Part 9: Maximum Disruption Strategy
+
+Part 9 is the final creative ending. It does not need a new Excel dataset. It reuses the official results from Part 1, Part 2, Part 3, and Part 8. The final strategy shows route access, suspicious access evidence, selected high-impact targets, top threat messages, resource usage, and the final maximum disruption result.
+
 ## Closing
 
-The final program is presentation-ready because every Part prints the mission problem, selected algorithm, rejected algorithms, dataset evidence, result, explanation, and complexity.
+The final program is presentation-ready because every Part prints the mission problem, selected algorithm, rejected algorithms, dataset or synthesis evidence, result, explanation, and complexity.

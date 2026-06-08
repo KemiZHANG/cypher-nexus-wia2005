@@ -4,12 +4,15 @@ This is only a local visualization layer. The source of truth for algorithms
 and official outputs remains cypher_nexus_project.py.
 """
 
+import math
+
 import pandas as pd
 import streamlit as st
 
 from cypher_nexus_project import (
     PART_INFO,
     RUNNERS_BY_PART,
+    TOTAL_PARTS,
     choose_start_and_destination,
     controlled_randomisation,
     joint_risk_from_row,
@@ -114,7 +117,7 @@ def apply_algorithm_choice(part_number, selected_algorithm, state):
         if badge_name not in badges:
             badges.append(badge_name)
 
-    next_mission = min(8, part_number + 1)
+    next_mission = min(TOTAL_PARTS, part_number + 1)
     state["current_mission"] = max(int(state.get("current_mission", 1)), next_mission)
     return {
         "correct": True,
@@ -143,6 +146,14 @@ def reset_challenge_progress():
 def dataset_metadata_for_part(part_number, result=None, sheet_override=None):
     if result and result.get("meta"):
         return result["meta"]
+    if part_number == 9:
+        return {
+            "member": "Derived from Parts 1, 2, 3, and 8",
+            "source": "Previous official outputs",
+            "sheet": "N/A",
+            "row_count": "-",
+            "columns_used": PART_INFO[part_number]["columns"],
+        }
     try:
         _, metadata = get_part_dataframe_cached(part_number, sheet_override)
         return metadata
@@ -157,7 +168,7 @@ def dataset_metadata_for_part(part_number, result=None, sheet_override=None):
 
 def build_mission_cards(results, language, completed_missions=None):
     cards = []
-    for part_number in range(1, 9):
+    for part_number in range(1, TOTAL_PARTS + 1):
         result = results.get(f"part{part_number}")
         info = localized_part_info(part_number, language)
         status = (
@@ -234,7 +245,7 @@ def render_progress_strip(language):
     st.markdown(
         f"""
         <div class="mission-strip">
-            <div class="strip-cell"><div class="card-small">{t('progress', language)}</div><div class="strip-number">{completed_count}/8</div></div>
+            <div class="strip-cell"><div class="card-small">{t('progress', language)}</div><div class="strip-number">{completed_count}/{TOTAL_PARTS}</div></div>
             <div class="strip-cell"><div class="card-small">{t('coins', language)}</div><div class="strip-number">{coins}</div></div>
             <div class="strip-cell"><div class="card-small">{t('badges', language)}</div><div class="strip-number">{len(badges)}</div></div>
             <div class="strip-cell"><div class="card-small">{t('mission_challenge_mode', language)}</div><div class="strip-number">{mission_status(st.session_state.get('current_mission', 1), completed)}</div></div>
@@ -242,7 +253,7 @@ def render_progress_strip(language):
         """,
         unsafe_allow_html=True,
     )
-    st.progress(completed_count / 8, text=f"{completed_count} / 8")
+    st.progress(completed_count / TOTAL_PARTS, text=f"{completed_count} / {TOTAL_PARTS}")
 
 
 def render_landing(language):
@@ -256,7 +267,7 @@ def render_landing(language):
             <div class="mission-subtitle">{t('subtitle', language)}</div>
             <h1>{t('title', language)}</h1>
             <p>{t('story', language)}</p>
-            {badge(f"{completed_count} / 8 {t('completed_missions', language)}", 'complete' if completed_count == 8 else 'ready')}
+            {badge(f"{completed_count} / {TOTAL_PARTS} {t('completed_missions', language)}", 'complete' if completed_count == TOTAL_PARTS else 'ready')}
             {badge(f"{t('coins', language)}: {coins}", 'ready')}
             {badge(f"{t('badges', language)}: {len(badges)}", 'muted')}
             {badge(t('optional_note', language), 'muted')}
@@ -265,7 +276,7 @@ def render_landing(language):
         unsafe_allow_html=True,
     )
     st.markdown(f"**{t('progress', language)}**")
-    st.progress(completed_count / 8, text=f"{completed_count} / 8")
+    st.progress(completed_count / TOTAL_PARTS, text=f"{completed_count} / {TOTAL_PARTS}")
 
     first, second, third = st.columns(3)
     with first:
@@ -283,9 +294,9 @@ def render_landing(language):
             st.rerun()
 
     cards = build_mission_cards(st.session_state.get("results", {}), language, completed_missions=completed)
-    rows = [st.columns(4), st.columns(4)]
+    rows = [st.columns(3) for _ in range(math.ceil(len(cards) / 3))]
     for index, mission_card in enumerate(cards):
-        with rows[index // 4][index % 4]:
+        with rows[index // 3][index % 3]:
             st.markdown(
                 card_html(
                     f"{t('part_word', language)} {mission_card['part_number']}: {mission_card['mission_name']}",
@@ -439,6 +450,34 @@ def render_visualization(part_number, result, language):
         if not df.empty:
             st.caption("Threat score chart")
             st.bar_chart(df.set_index("Message_ID")["Threat_Score"])
+    elif part_number == 9:
+        render_table_note("Part 9 synthesizes previous official outputs into one final strategy instead of loading a new dataset.")
+        st.write("Mission synthesis")
+        st.dataframe(dataframe_from_rows(result.get("strategy_steps", [])), width="stretch", hide_index=True)
+        threats = dataframe_from_rows(result.get("top_threats", []))
+        if not threats.empty:
+            st.write("Top threats from Part 8")
+            st.dataframe(threats, width="stretch", hide_index=True)
+        targets = dataframe_from_rows(result.get("selected_targets", []))
+        if not targets.empty:
+            st.write("Selected disruption targets")
+            st.dataframe(targets, width="stretch", hide_index=True)
+            st.caption("Target impact chart")
+            st.bar_chart(targets.set_index("Target")["Impact"])
+        caps = result.get("capacities", (1, 1, 1))
+        usage = [
+            ("Energy", result.get("total_energy", 0), caps[0]),
+            ("Time", result.get("total_time", 0), caps[1]),
+            ("Token", result.get("total_tokens", 0), caps[2]),
+        ]
+        for label, used, cap in usage:
+            st.write(f"{label}: {used} / {cap}")
+            st.progress(min(float(used) / float(cap), 1.0) if cap else 0)
+        effects = result.get("final_effects", [])
+        if effects:
+            st.write("Final effects")
+            for effect in effects:
+                st.write(f"- {effect}")
 
 
 def render_part6_tables(result, language):
@@ -537,7 +576,7 @@ def render_why_it_matters(part_number, language):
 
 def render_defense_matrix(results, language):
     section_header(t("defense_matrix", language))
-    st.caption("Group-wide evidence that all eight Parts include dataset usage, algorithm comparison, output, and complexity.")
+    st.caption(f"Group-wide evidence that all {TOTAL_PARTS} Parts include dataset usage or synthesis evidence, algorithm comparison, output, and complexity.")
     rows = build_defense_matrix_rows(results)
     st.dataframe(pd.DataFrame(rows, columns=DEFENSE_MATRIX_COLUMNS), width="stretch", hide_index=True)
 
@@ -673,7 +712,7 @@ def render_result_sections(part_number, result, language, sheet_override, show_r
 
 def render_final_completion(language):
     completed = set(st.session_state.get("completed_missions", set()))
-    if len(completed) < 8:
+    if len(completed) < TOTAL_PARTS:
         return
     completed_names = ", ".join(part_label(part_number, language) for part_number in sorted(completed))
     badges = st.session_state.get("badges", [])
@@ -681,7 +720,7 @@ def render_final_completion(language):
         f"""
         <div class="result-card">
             {badge(t('final_complete', language), 'complete')}
-            <div class="card-title">{t('final_complete', language)} - 8 / 8 {t('completed_missions', language)}</div>
+            <div class="card-title">{t('final_complete', language)} - {TOTAL_PARTS} / {TOTAL_PARTS} {t('completed_missions', language)}</div>
             <div class="card-small"><b>{t('final_mission_summary', language)}:</b> {t('final_summary', language)}</div>
             <div class="card-small"><b>{t('total_rewards', language)}:</b> {t('coins', language)}: {st.session_state.get('coins', 0)} | {t('badges', language)}: {len(badges)}</div>
             <div class="card-small"><b>{t('completed_missions', language)}:</b> {completed_names}</div>
@@ -709,7 +748,7 @@ def render_mission_log(language):
 
 
 def next_part_button(part_number, language):
-    next_part = 1 if part_number == 8 else part_number + 1
+    next_part = 1 if part_number == TOTAL_PARTS else part_number + 1
     if st.button(f"{t('next_mission', language)}: {part_label(next_part, language)}"):
         st.session_state.nav_index = next_part
         st.session_state.current_mission = next_part
@@ -773,7 +812,7 @@ def render_challenge_part_page(part_number, language, sheet_override):
 
     render_algorithm_analysis_sections(part_number, result, language, sheet_override, show_run_button=False)
 
-    if part_number < 8:
+    if part_number < TOTAL_PARTS:
         next_part_button(part_number, language)
     else:
         render_final_completion(language)
@@ -797,16 +836,16 @@ def render_direct_demo(language, sheet_override):
         with st.spinner(t("running_all", language)):
             st.session_state.results = run_all_official_parts_cached()
         st.session_state.direct_results_visible = True
-        mission_log_add("Direct Demo Mode: all 8 official mission outputs executed.")
+        mission_log_add(f"Direct Demo Mode: all {TOTAL_PARTS} official mission outputs executed.")
         st.success(t("all_finished", language))
 
     results = st.session_state.get("results", {})
     render_defense_matrix(results, language)
-    if not st.session_state.get("direct_results_visible") and not all(f"part{i}" in results for i in range(1, 9)):
+    if not st.session_state.get("direct_results_visible") and not all(f"part{i}" in results for i in range(1, TOTAL_PARTS + 1)):
         cards = build_mission_cards(results, language)
-        rows = [st.columns(4), st.columns(4)]
+        rows = [st.columns(3) for _ in range(math.ceil(len(cards) / 3))]
         for index, mission_card in enumerate(cards):
-            with rows[index // 4][index % 4]:
+            with rows[index // 3][index % 3]:
                 st.markdown(
                     card_html(
                         f"{t('part_word', language)} {mission_card['part_number']}: {mission_card['mission_name']}",
@@ -821,14 +860,14 @@ def render_direct_demo(language, sheet_override):
 
     st.caption(t("fast_mode_note", language))
     if st.checkbox(t("render_all_details", language), value=False):
-        for part_number in range(1, 9):
+        for part_number in range(1, TOTAL_PARTS + 1):
             result = results.get(f"part{part_number}")
             with st.expander(part_label(part_number, language), expanded=part_number == 1):
                 render_result_sections(part_number, result, language, sheet_override, show_run_button=not result)
     else:
         selected_part = st.selectbox(
             t("select_result_detail", language),
-            list(range(1, 9)),
+            list(range(1, TOTAL_PARTS + 1)),
             format_func=lambda part_number: part_label(part_number, language),
             key="direct_detail_part",
         )
@@ -839,7 +878,7 @@ def render_direct_demo(language, sheet_override):
 
 
 def sidebar(language):
-    view_options = [t("overview", language)] + [part_label(i, language) for i in range(1, 9)]
+    view_options = [t("overview", language)] + [part_label(i, language) for i in range(1, TOTAL_PARTS + 1)]
     default_index = min(st.session_state.get("nav_index", 0), len(view_options) - 1)
     selected_label = st.sidebar.selectbox(t("select_part", language), view_options, index=default_index)
     st.session_state.nav_index = view_options.index(selected_label)

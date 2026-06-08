@@ -1,0 +1,5 @@
+﻿Phase,Source,Decision,Evidence
+Phase 1 - Gain Access,Part 1 route access,Use the safest computed route to enter the core chamber.,Port Authority Hub -> Warehouse A -> Safe House 1 -> Financial Vault Access
+Phase 2 - Exploit Internal Access,Part 2 identity verification,Use suspicious access evidence to justify the internal bypass step.,A2876 / key T7Q1 / score 12
+Phase 3 - Select High-Impact Targets,Part 3 target optimization,"Reuse the DP-selected target subset under energy, time, and token limits.","4 targets, impact 46"
+Phase 4 - Execute Coordinated Disruption,Part 8 threat ranking,Prioritize the final ending around the highest-ranked trigger messages and route tags.,"Messages M04, M07, M08; tags GRID-HUB-B2, CORE-LINK-7"

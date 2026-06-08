@@ -4,7 +4,7 @@ This file contains only dashboard copy and analysis metadata. Official
 algorithms, dataset loading, and saved outputs remain in cypher_nexus_project.py.
 """
 
-from cypher_nexus_project import DEFAULT_SHEETS, PART_FILE_NAMES, PART_INFO
+from cypher_nexus_project import DEFAULT_SHEETS, PART_FILE_NAMES, PART_INFO, TOTAL_PARTS
 
 
 ALGORITHM_CHOICES = {
@@ -72,6 +72,14 @@ ALGORITHM_CHOICES = {
             "Regex/Search only": "Regex/Search only is rejected because it does not explain the selected PPT algorithm or ranking logic clearly.",
         },
     },
+    9: {
+        "options": ["Narrative-only Ending", "Greedy Highest-Threat Selection", "Integrated DP Final Strategy"],
+        "correct": "Integrated DP Final Strategy",
+        "wrong_feedback": {
+            "Narrative-only Ending": "Narrative-only ending is rejected because Part 9 must connect clearly to earlier algorithm outputs.",
+            "Greedy Highest-Threat Selection": "Greedy highest-threat selection is rejected because it ignores resource constraints and the DP target plan.",
+        },
+    },
 }
 
 CANDIDATE_ALGORITHMS = {part_number: choices["options"] for part_number, choices in ALGORITHM_CHOICES.items()}
@@ -85,6 +93,7 @@ MISSION_OUTCOMES = {
     6: "Urgent event order stabilized.",
     7: "Unpredictable sector selected.",
     8: "Critical trigger message ranked.",
+    9: "Maximum disruption strategy synthesized.",
 }
 
 MISSION_FEEDBACK = {
@@ -96,6 +105,7 @@ MISSION_FEEDBACK = {
     6: "Urgent event order prioritized.",
     7: "Sector selected with controlled randomness.",
     8: "Trigger messages detected and ranked.",
+    9: "Final strategy synthesized from previous outputs.",
 }
 
 MISSION_STORIES = {
@@ -107,6 +117,7 @@ MISSION_STORIES = {
     6: "The countdown stream is noisy. Events must be sorted by priority, timestamp, launch relevance, and stable arrival order.",
     7: "Repeated deterministic choices are predictable, so the sector selection uses controlled randomness while respecting risk.",
     8: "Intercepted messages may contain trigger phrases; the output must detect and rank the highest-risk messages.",
+    9: "The final ending must connect earlier outputs into one coherent strategy: gain access, use access evidence, select high-impact targets, and prioritize the final disruption.",
 }
 
 MISSION_STORY_TRANSLATIONS = {
@@ -119,6 +130,7 @@ MISSION_STORY_TRANSLATIONS = {
         6: "倒计时事件流很混乱，必须按优先级、时间、发射相关性和稳定到达顺序排序。",
         7: "重复的确定性选择容易被预测，因此区域选择需要在风险约束下进行受控随机化。",
         8: "拦截消息可能包含触发短语，输出需要检测并排序最高风险的信息。",
+        9: "最终结局需要把前面结果连成一个完整策略：进入核心、使用访问证据、选择高影响目标，并完成最终破坏方案。",
     },
     "Bahasa Melayu": {
         1: "Dataset laluan pelabuhan perlu mengelak laluan pendek yang terlalu berisiko.",
@@ -129,6 +141,7 @@ MISSION_STORY_TRANSLATIONS = {
         6: "Aliran kiraan detik bercampur; acara perlu diisih mengikut prioriti, masa, kaitan pelancaran dan susunan stabil.",
         7: "Pilihan deterministik berulang mudah diramal, jadi pemilihan sektor menggunakan rawakan terkawal dengan risiko masih dikira.",
         8: "Mesej pintasan mungkin mengandungi frasa pencetus; output perlu mengesan dan menyusun mesej berisiko tinggi.",
+        9: "Pengakhiran akhir menggabungkan output awal: akses masuk, bukti akses, sasaran berimpak tinggi dan gangguan akhir.",
     },
 }
 
@@ -141,6 +154,7 @@ KEY_TAKEAWAYS = {
     6: "Stable multi-field sorting turns a noisy countdown feed into an actionable priority order.",
     7: "Controlled randomness reduces predictability while still respecting surveillance risk.",
     8: "Phrase detection becomes useful only after messages are ranked by threat severity.",
+    9: "A strong creative ending is defendable when it is synthesized from actual outputs, not invented separately.",
 }
 
 WHY_IT_MATTERS = {
@@ -152,6 +166,7 @@ WHY_IT_MATTERS = {
     6: "This turns a noisy event feed into an ordered action list that can be defended field by field.",
     7: "This explains how the team stays less predictable without ignoring risk and decoy value.",
     8: "This connects phrase matching to final threat priority, so the output supports mission action instead of just text search.",
+    9: "This turns Part 9 from a story-only ending into a logical final decision backed by Parts 1, 2, 3, and 8.",
 }
 
 ALGORITHM_DECISIONS = {
@@ -163,6 +178,7 @@ ALGORITHM_DECISIONS = {
     6: "Modified Stable Merge Sort is selected because the event stream needs a stable multi-field order: priority, timestamp, launch relevance, then original index.",
     7: "Controlled Randomisation is selected because the output should be less predictable while still using risk and decoy evidence.",
     8: "Brute Force String Matching plus ranking is selected because phrase detection must stay transparent and then be converted into threat priority.",
+    9: "Integrated DP Final Strategy is selected because it reuses the official route, access, target-optimization, and threat-ranking outputs to produce one final decision.",
 }
 
 DEFENSE_NOTES = {
@@ -199,6 +215,11 @@ DEFENSE_NOTES = {
         "Brute force is transparent and easy to defend for multi-word phrase scanning.",
         "Ranking links detection results to threat priority.",
     ],
+    9: [
+        "Part 9 has no separate dataset; it is derived from previous official outputs.",
+        "The selected targets still come from the Part 3 DP result, so resource constraints remain visible.",
+        "The final ending connects Part 1 route access, Part 2 access evidence, Part 3 target optimization, and Part 8 threat ranking.",
+    ],
 }
 
 MISSION_FORWARD = {
@@ -210,6 +231,7 @@ MISSION_FORWARD = {
     6: "The sorted event feed shows which alerts should be handled first under countdown pressure.",
     7: "Controlled randomness reduces predictability while keeping risk in the scoring model.",
     8: "Threat ranking identifies the most important message evidence.",
+    9: "The final strategy closes the project by showing how earlier algorithm outputs combine into a coherent ending.",
 }
 
 RESULT_KEYS = {
@@ -221,6 +243,7 @@ RESULT_KEYS = {
     6: "top_five",
     7: "sector_scores",
     8: "ranked_messages",
+    9: "selected_targets",
 }
 
 RESULT_PAGE_SECTIONS = [
@@ -238,7 +261,7 @@ RESULT_PAGE_SECTIONS = [
     "How this result moves the mission forward",
 ]
 
-HELPFUL_CHART_PARTS = {2, 3, 4, 6, 7, 8}
+HELPFUL_CHART_PARTS = {2, 3, 4, 6, 7, 8, 9}
 
 PROBLEM_TYPES = {
     1: "Weighted graph route planning",
@@ -249,6 +272,7 @@ PROBLEM_TYPES = {
     6: "Stable multi-field sorting",
     7: "Risk-aware randomized selection",
     8: "String matching and threat ranking",
+    9: "Final result synthesis",
 }
 
 DEFENSE_MATRIX_COLUMNS = [
@@ -287,16 +311,27 @@ def key_output_for_part(part_number, result=None):
     if part_number == 8:
         rows = result.get("ranked_messages", [])
         return f"{rows[0]['Message_ID']} score {rows[0]['Threat_Score']}" if rows else MISSION_OUTCOMES[part_number]
+    if part_number == 9:
+        return (
+            f"{result.get('final_result', MISSION_OUTCOMES[part_number])}: "
+            f"impact {result.get('total_operational_impact', 0)}"
+        )
     return MISSION_OUTCOMES[part_number]
 
 
 def build_defense_matrix_rows(results=None):
     results = results or {}
     rows = []
-    for part_number in range(1, 9):
+    for part_number in range(1, TOTAL_PARTS + 1):
         result = results.get(f"part{part_number}")
         meta = result.get("meta", {}) if result else {}
-        dataset = meta.get("member") or f"{PART_FILE_NAMES[part_number]} / Sheet {DEFAULT_SHEETS.get(part_number, 'A')}"
+        dataset = meta.get("member")
+        if not dataset:
+            dataset = (
+                f"{PART_FILE_NAMES[part_number]} / Sheet {DEFAULT_SHEETS.get(part_number, 'A')}"
+                if part_number in PART_FILE_NAMES
+                else "Derived from Parts 1, 2, 3, and 8"
+            )
         rows.append(
             {
                 "Part": f"Part {part_number}",

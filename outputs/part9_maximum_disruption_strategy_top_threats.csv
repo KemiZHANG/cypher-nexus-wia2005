@@ -1,0 +1,4 @@
+﻿Rank,Message_ID,Threat_Score,Threat_Level,Route_Tag
+1,M04,7.0,Critical,GRID-HUB-B2
+2,M07,5.0,High,None
+3,M08,4.0,High,CORE-LINK-7

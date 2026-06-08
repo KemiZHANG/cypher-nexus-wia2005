@@ -98,3 +98,14 @@ Original column -> algorithm field:
 - Message_ID -> Message_ID
 - Text_Stream -> Text_Stream
 - Route_Tag -> Route_Tag
+
+Part 9 - Maximum Disruption Strategy
+Dataset file: Derived from Parts 1, 2, 3, and 8
+Sheet name: N/A
+Row count: 29
+Columns used by algorithm: Part1_Route, Part2_Access_Evidence, Part3_Selected_Targets, Part8_Threat_Ranking
+Original column -> algorithm field:
+- Part 1 selected route -> Part1_Route
+- Part 2 suspicious identity -> Part2_Access_Evidence
+- Part 3 selected checkpoints -> Part3_Selected_Targets
+- Part 8 ranked messages -> Part8_Threat_Ranking

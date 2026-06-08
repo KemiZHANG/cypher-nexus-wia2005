@@ -6,7 +6,7 @@ Python implementation for WIA2005 group project demonstration.
 Run:
     python cypher_nexus_project.py
 
-The program loads the dataset ZIP automatically when possible, runs Parts 1-8
+The program loads the dataset ZIP automatically when possible, runs Parts 1-9
 in order, and saves presentation-friendly text outputs into the outputs folder.
 """
 
@@ -23,6 +23,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+
+TOTAL_PARTS = 9
+DATASET_PARTS = tuple(range(1, 9))
 
 DEFAULT_SHEETS = {
     1: "C",  # PPT Part 1 explicitly shows Sheet C.
@@ -207,6 +210,18 @@ PART_INFO = {
         "complexity": "Time O(messages*phrases*text_length*phrase_length), space O(messages+phrases).",
         "columns": ["Message_ID", "Text_Stream", "Route_Tag"],
         "output_base": "part8_silent_code",
+    },
+    9: {
+        "title": "Maximum Disruption Strategy",
+        "mission_problem": "Synthesize earlier outputs into a final ending that targets the highest-impact systems under resource constraints.",
+        "algorithm": "Integrated DP Final Strategy",
+        "rejected": [
+            "Narrative-only ending is rejected because it does not connect the final decision to algorithm outputs.",
+            "Greedy highest-threat selection is rejected because it ignores energy, time, and token constraints from the target optimization stage.",
+        ],
+        "complexity": "Time O(t + p), space O(t + p) for t selected targets and p ranked threat messages after reusing earlier algorithm outputs.",
+        "columns": ["Part1_Route", "Part2_Access_Evidence", "Part3_Selected_Targets", "Part8_Threat_Ranking"],
+        "output_base": "part9_maximum_disruption_strategy",
     },
 }
 
@@ -730,6 +745,13 @@ def list_dataset_contents(dataset_zip_path=None):
                     lines.append(
                         f"  {sheet_name}: rows={len(clean_df)}, columns={', '.join(map(str, clean_df.columns))}"
                     )
+    lines.extend(
+        [
+            "Part 9: Maximum Disruption Strategy",
+            "  derived from previous outputs: Part 1 route, Part 2 access evidence, Part 3 target optimization, Part 8 threat ranking",
+            "  no separate Part 9 dataset file is required",
+        ]
+    )
     return "\n".join(lines)
 
 
@@ -1582,6 +1604,232 @@ def run_part8_silent_code(sheet=None, dataset_zip_path=None, output_dir="outputs
     return result
 
 
+# ---------------------------------------------------------------------------
+# Part 9: Final synthesis and maximum disruption strategy
+
+
+def disruption_purpose_for_target(target_name):
+    name = to_text(target_name).lower()
+    if any(token in name for token in ("camera", "surveillance", "sensor")):
+        return "Surveillance coverage is disrupted"
+    if any(token in name for token in ("patrol", "drone", "relay")):
+        return "Patrol coordination is disrupted"
+    if any(token in name for token in ("beacon", "navigation", "communication", "route")):
+        return "Communication routing is disrupted"
+    if any(token in name for token in ("access", "gate", "security", "log", "command")):
+        return "Command and access control are disrupted"
+    return "High-impact system is disrupted"
+
+
+def build_maximum_disruption_strategy(part1_result, part2_result, part3_result, part8_result):
+    route = part1_result.get("route", []) if part1_result else []
+    route_text = " -> ".join(route) if route else "Route unavailable"
+
+    identities = part2_result.get("suspicious_identities", []) if part2_result else []
+    access_identity = identities[0] if identities else {}
+    access_summary = (
+        f"{access_identity.get('Agent_ID', 'Unknown')} / key {access_identity.get('Access_Key', 'Unknown')} "
+        f"/ score {access_identity.get('Suspicion_Score', 0)}"
+    )
+
+    ranked_messages = list(part8_result.get("ranked_messages", [])) if part8_result else []
+    top_threats = []
+    for rank, row in enumerate(ranked_messages[:3], start=1):
+        top_threats.append(
+            {
+                "Rank": rank,
+                "Message_ID": to_text(row.get("Message_ID")),
+                "Threat_Score": to_float(row.get("Threat_Score")),
+                "Threat_Level": to_text(row.get("Threat_Level")),
+                "Route_Tag": to_text(row.get("Route_Tag"), "None") or "None",
+            }
+        )
+
+    selected_rows = list(part3_result.get("selected_checkpoints", [])) if part3_result else []
+    selected_targets = []
+    for row in selected_rows:
+        target = to_text(row.get("Checkpoint") or row.get("Target"))
+        selected_targets.append(
+            {
+                "Target": target,
+                "Energy": to_int(row.get("Energy")),
+                "Time": to_int(row.get("Time")),
+                "Token": to_int(row.get("Token")),
+                "Impact": to_float(row.get("Impact")),
+                "Purpose": disruption_purpose_for_target(target),
+            }
+        )
+
+    capacities = part3_result.get("capacities", (15, 35, 4)) if part3_result else (15, 35, 4)
+    total_energy = to_int(part3_result.get("total_energy")) if part3_result else sum(row["Energy"] for row in selected_targets)
+    total_time = to_int(part3_result.get("total_time")) if part3_result else sum(row["Time"] for row in selected_targets)
+    total_tokens = to_int(part3_result.get("total_tokens")) if part3_result else sum(row["Token"] for row in selected_targets)
+    total_impact = to_float(part3_result.get("total_impact")) if part3_result else sum(row["Impact"] for row in selected_targets)
+
+    top_tags = [row["Route_Tag"] for row in top_threats if row["Route_Tag"] and row["Route_Tag"] != "None"]
+    top_messages = ", ".join(row["Message_ID"] for row in top_threats if row["Message_ID"]) or "No threat messages"
+    effects = []
+    for target in selected_targets:
+        if target["Purpose"] not in effects:
+            effects.append(target["Purpose"])
+    if not effects:
+        effects = ["Core disruption plan is ready"]
+
+    strategy_steps = [
+        {
+            "Phase": "Phase 1 - Gain Access",
+            "Source": "Part 1 route access",
+            "Decision": "Use the safest computed route to enter the core chamber.",
+            "Evidence": route_text,
+        },
+        {
+            "Phase": "Phase 2 - Exploit Internal Access",
+            "Source": "Part 2 identity verification",
+            "Decision": "Use suspicious access evidence to justify the internal bypass step.",
+            "Evidence": access_summary,
+        },
+        {
+            "Phase": "Phase 3 - Select High-Impact Targets",
+            "Source": "Part 3 target optimization",
+            "Decision": "Reuse the DP-selected target subset under energy, time, and token limits.",
+            "Evidence": f"{len(selected_targets)} targets, impact {format_number(total_impact)}",
+        },
+        {
+            "Phase": "Phase 4 - Execute Coordinated Disruption",
+            "Source": "Part 8 threat ranking",
+            "Decision": "Prioritize the final ending around the highest-ranked trigger messages and route tags.",
+            "Evidence": f"Messages {top_messages}; tags {', '.join(top_tags) if top_tags else 'None'}",
+        },
+    ]
+
+    return {
+        "final_result": "Maximum Disruption Achieved",
+        "route_access": route_text,
+        "access_summary": access_summary,
+        "top_threats": top_threats,
+        "selected_targets": selected_targets,
+        "resource_usage": {
+            "Energy": f"{total_energy} / {capacities[0]}",
+            "Time": f"{total_time} / {capacities[1]}",
+            "Token": f"{total_tokens} / {capacities[2]}",
+        },
+        "total_energy": total_energy,
+        "total_time": total_time,
+        "total_tokens": total_tokens,
+        "total_operational_impact": total_impact,
+        "capacities": capacities,
+        "final_effects": effects,
+        "strategy_steps": strategy_steps,
+        "final_story": (
+            "Maximum Disruption Achieved. Final effects: "
+            + "; ".join(effects)
+            + ". Mission complete."
+        ),
+    }
+
+
+def part9_metadata(part1_result=None, part2_result=None, part3_result=None, part8_result=None):
+    row_count = 0
+    for result, key in (
+        (part1_result, "route"),
+        (part2_result, "suspicious_identities"),
+        (part3_result, "selected_checkpoints"),
+        (part8_result, "ranked_messages"),
+    ):
+        if isinstance(result, dict):
+            value = result.get(key, [])
+            row_count += len(value) if isinstance(value, list) else 1
+    return {
+        "member": "Derived from Parts 1, 2, 3, and 8",
+        "source": "Previous official outputs",
+        "sheet": "N/A",
+        "row_count": row_count,
+        "columns_used": PART_INFO[9]["columns"],
+        "available_columns": PART_INFO[9]["columns"],
+        "column_mapping": {
+            "Part 1 selected route": "Part1_Route",
+            "Part 2 suspicious identity": "Part2_Access_Evidence",
+            "Part 3 selected checkpoints": "Part3_Selected_Targets",
+            "Part 8 ranked messages": "Part8_Threat_Ranking",
+        },
+    }
+
+
+def run_part9_maximum_disruption_strategy(
+    sheet=None,
+    dataset_zip_path=None,
+    output_dir="outputs",
+    previous_results=None,
+    sheet_overrides=None,
+):
+    previous_results = previous_results or {}
+    sheet_overrides = sheet_overrides or {}
+
+    part1_result = previous_results.get("part1") or run_part1_shadow_network(
+        sheet=sheet_overrides.get(1), dataset_zip_path=dataset_zip_path, output_dir=output_dir
+    )
+    part2_result = previous_results.get("part2") or run_part2_double_agent_registry(
+        sheet=sheet_overrides.get(2), dataset_zip_path=dataset_zip_path, output_dir=output_dir
+    )
+    part3_result = previous_results.get("part3") or run_part3_resource_lockdown(
+        sheet=sheet_overrides.get(3), dataset_zip_path=dataset_zip_path, output_dir=output_dir
+    )
+    part8_result = previous_results.get("part8") or run_part8_silent_code(
+        sheet=sheet_overrides.get(8), dataset_zip_path=dataset_zip_path, output_dir=output_dir
+    )
+
+    result = build_maximum_disruption_strategy(part1_result, part2_result, part3_result, part8_result)
+    meta = part9_metadata(part1_result, part2_result, part3_result, part8_result)
+    result["meta"] = meta
+    detail_lines = [
+        "Input from Part 1:",
+        f"Route access: {result['route_access']}",
+        "",
+        "Input from Part 2:",
+        f"Access evidence: {result['access_summary']}",
+        "",
+        "Input from Part 8:",
+        "Top threats identified:",
+        format_table(result["top_threats"], ["Rank", "Message_ID", "Threat_Score", "Threat_Level", "Route_Tag"]),
+        "",
+        "Resource constraints from Part 3:",
+        f"Energy: {result['resource_usage']['Energy']}",
+        f"Time: {result['resource_usage']['Time']}",
+        f"Token: {result['resource_usage']['Token']}",
+        "",
+        "Selected disruption targets:",
+        format_table(result["selected_targets"], ["Target", "Energy", "Time", "Token", "Impact", "Purpose"]),
+        "",
+        "Mission synthesis:",
+        format_table(result["strategy_steps"], ["Phase", "Source", "Decision", "Evidence"]),
+        "",
+        "Final result:",
+        result["final_story"],
+    ]
+    text = build_standard_report(
+        9,
+        meta,
+        key_result=(
+            f"{result['final_result']} with total operational impact "
+            f"{format_number(result['total_operational_impact'])}."
+        ),
+        result_explanation="Part 9 is a creative final ending that synthesizes earlier official outputs instead of introducing a new dataset.",
+        detail_lines=detail_lines,
+    )
+    result = attach_outputs(
+        result,
+        9,
+        output_dir,
+        text,
+        {
+            "selected_targets": result["selected_targets"],
+            "top_threats": result["top_threats"],
+            "strategy_steps": result["strategy_steps"],
+        },
+    )
+    return result
+
+
 def run_all_parts(sheet_overrides=None, dataset_zip_path=None, output_dir="outputs"):
     sheet_overrides = sheet_overrides or {}
     runners = [
@@ -1597,14 +1845,8 @@ def run_all_parts(sheet_overrides=None, dataset_zip_path=None, output_dir="outpu
     results = {}
     summary_lines = ["Operation Cypher Nexus - Run Summary", ""]
     metadata_by_part = {}
-    for index, (name, runner) in enumerate(runners, start=1):
-        result = runner(
-            sheet=sheet_overrides.get(index),
-            dataset_zip_path=dataset_zip_path,
-            output_dir=output_dir,
-        )
-        results[name] = result
-        metadata_by_part[index] = result.get("meta", {})
+
+    def append_summary(index, result):
         csv_files = result.get("csv_files", [])
         summary_lines.extend(
             [
@@ -1618,6 +1860,26 @@ def run_all_parts(sheet_overrides=None, dataset_zip_path=None, output_dir="outpu
                 "",
             ]
         )
+
+    for index, (name, runner) in enumerate(runners, start=1):
+        result = runner(
+            sheet=sheet_overrides.get(index),
+            dataset_zip_path=dataset_zip_path,
+            output_dir=output_dir,
+        )
+        results[name] = result
+        metadata_by_part[index] = result.get("meta", {})
+        append_summary(index, result)
+
+    part9_result = run_part9_maximum_disruption_strategy(
+        dataset_zip_path=dataset_zip_path,
+        output_dir=output_dir,
+        previous_results=results,
+        sheet_overrides=sheet_overrides,
+    )
+    results["part9"] = part9_result
+    metadata_by_part[9] = part9_result.get("meta", {})
+    append_summary(9, part9_result)
 
     summary_text = "\n".join(summary_lines)
     write_output(output_dir, "run_summary.txt", summary_text)
@@ -1637,13 +1899,14 @@ RUNNERS_BY_PART = {
     6: run_part6_countdown_sequence,
     7: run_part7_phantom_dice,
     8: run_part8_silent_code,
+    9: run_part9_maximum_disruption_strategy,
 }
 
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="Run Operation Cypher Nexus algorithms.")
     parser.add_argument("--all", action="store_true", help="Run all parts and save outputs.")
-    parser.add_argument("--part", type=int, choices=range(1, 9), help="Run one part only, for example --part 6.")
+    parser.add_argument("--part", type=int, choices=range(1, TOTAL_PARTS + 1), help="Run one part only, for example --part 6.")
     parser.add_argument("--sheet", choices=["A", "B", "C"], help="Optional sheet override for the selected part.")
     parser.add_argument("--dataset", help="Optional path to Datasets (2).zip.")
     parser.add_argument("--list-data", action="store_true", help="List dataset files, sheets, row counts, and columns.")
@@ -1672,7 +1935,7 @@ def main(argv=None):
             return
 
         results = run_all_parts(dataset_zip_path=args.dataset, output_dir="outputs")
-        for index in range(1, 9):
+        for index in range(1, TOTAL_PARTS + 1):
             print(results[f"part{index}"]["output_text"])
             print("\n" + "=" * 80 + "\n")
         print(results["summary"]["output_text"])
