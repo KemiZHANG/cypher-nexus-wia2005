@@ -269,7 +269,7 @@ Requirements:
 
 - Python 3.10 or newer
 - Git, or download the repository ZIP from GitHub
-- `Datasets (2).zip` placed inside the project folder, parent folder, or supported dataset path
+- `Datasets (2).zip` is included in this GitHub repository and is available after cloning
 
 Mac terminal commands:
 

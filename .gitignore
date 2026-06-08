@@ -11,4 +11,5 @@ env/
 *.log
 *.tmp
 Datasets*.zip
+!Datasets (2).zip
 *.xlsx
