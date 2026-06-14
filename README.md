@@ -70,7 +70,7 @@ pip install -r requirements.txt
 
 - Python 3.10 或更高版本
 - Git，或者直接从 GitHub 下载 ZIP
-- `Datasets (2).zip` 数据集文件，放在项目文件夹内，或放在 `D:/Datasets (2).zip` / 上级文件夹中
+- `Datasets (2).zip` 已包含在 GitHub 仓库中，clone 后可以直接使用
 
 Mac 终端运行：
 
@@ -88,6 +88,38 @@ python3 -m streamlit run streamlit_app.py
 
 ```bash
 xcode-select --install
+```
+
+Windows PowerShell 运行：
+
+```powershell
+git clone https://github.com/KemiZHANG/cypher-nexus-wia2005.git
+cd cypher-nexus-wia2005
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m streamlit run streamlit_app.py
+```
+
+如果 Windows 阻止激活虚拟环境，先在同一个 PowerShell 窗口运行：
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+```
+
+如果 Windows 没有 Git 或 Python，可以先运行：
+
+```powershell
+winget install --id Git.Git -e
+winget install --id Python.Python.3.12 -e
+```
+
+Windows 如果默认联想浏览器打开后乱码，推荐用项目里的 Chrome 启动脚本：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\run_dashboard_chrome.ps1
 ```
 
 或者直接在 GitHub 页面点击 `Code -> Download ZIP`，解压后进入该文件夹再运行安装和 Streamlit 命令。
@@ -289,7 +321,39 @@ If Git is not installed on Mac, run:
 xcode-select --install
 ```
 
-Alternatively, click `Code -> Download ZIP` on GitHub, unzip the project, open Terminal in that folder, then run the virtual environment, install, and Streamlit commands above.
+Windows PowerShell commands:
+
+```powershell
+git clone https://github.com/KemiZHANG/cypher-nexus-wia2005.git
+cd cypher-nexus-wia2005
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m streamlit run streamlit_app.py
+```
+
+If Windows blocks virtual environment activation, run this in the same PowerShell window:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+```
+
+If Git or Python is not installed on Windows, install them first:
+
+```powershell
+winget install --id Git.Git -e
+winget install --id Python.Python.3.12 -e
+```
+
+If the default Lenovo browser shows broken characters, use the Chrome helper script:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\run_dashboard_chrome.ps1
+```
+
+Alternatively, click `Code -> Download ZIP` on GitHub, unzip the project, open Terminal or PowerShell in that folder, then run the virtual environment, install, and Streamlit commands above.
 
 ## CLI Usage
 
