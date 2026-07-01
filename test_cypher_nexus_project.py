@@ -15,7 +15,7 @@ from cypher_nexus_project import (
     require_columns,
     stable_merge_sort_events,
 )
-from dashboard_components import badge, card_html, coin_reward_panel_html
+from dashboard_components import badge, card_html, coin_reward_panel_html, flowchart_html
 from dashboard_content import (
     ALGORITHM_DECISIONS,
     DEFENSE_MATRIX_COLUMNS,
@@ -355,6 +355,14 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
         self.assertIn("reward-vault", html)
         self.assertIn("+1", html)
         self.assertIn("Part 1 Evidence Mark", html)
+
+    def test_flowchart_html_renders_as_markup_not_markdown_code(self):
+        html = flowchart_html(ALGORITHM_FLOWS[6], title="Flow explanation")
+        self.assertTrue(html.startswith('<div class="flow-card">'))
+        self.assertIn('<div class="flow-node">', html)
+        self.assertIn("Build sorting key", html)
+        self.assertIn("Stable merge", html)
+        self.assertNotIn("\n    <div", html)
 
     def test_cli_contract_for_required_commands_is_still_available(self):
         self.assertEqual(set(RUNNERS_BY_PART), set(range(1, TOTAL_PARTS + 1)))

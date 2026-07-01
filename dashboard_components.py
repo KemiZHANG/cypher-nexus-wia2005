@@ -605,25 +605,16 @@ def flowchart_html(flow, title="Algorithm flow"):
     nodes = []
     for index, step in enumerate(steps, start=1):
         nodes.append(
-            f"""
-            <div class="flow-node">
-                <div class="flow-step">{index:02d}</div>
-                <div class="flow-title">{escape(str(step.get('title', '')))}</div>
-                <div class="flow-detail">{escape(str(step.get('detail', '')))}</div>
-            </div>
-            """
+            '<div class="flow-node">'
+            f'<div class="flow-step">{index:02d}</div>'
+            f'<div class="flow-title">{escape(str(step.get("title", "")))}</div>'
+            f'<div class="flow-detail">{escape(str(step.get("detail", "")))}</div>'
+            "</div>"
         )
         if index < len(steps):
             nodes.append('<div class="flow-arrow" aria-hidden="true"></div>')
     note_html = f'<div class="flow-note"><b>{escape(str(title))}:</b> {escape(str(note))}</div>' if note else ""
-    return f"""
-    <div class="flow-card">
-        <div class="flow-grid">
-            {''.join(nodes)}
-        </div>
-        {note_html}
-    </div>
-    """
+    return '<div class="flow-card"><div class="flow-grid">' + "".join(nodes) + "</div>" + note_html + "</div>"
 
 
 def reward_chip(label):
