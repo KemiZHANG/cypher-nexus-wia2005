@@ -39,7 +39,7 @@ Suggested dashboard flow:
 8. Explain one assigned Part in detail while still reminding the teacher that every Part follows the same group-wide evidence structure.
 9. End with Part 9 to show how the route, access evidence, optimized targets, and threat ranking combine into the final creative ending.
 
-After each mission, point to the same defense order: Key Takeaway, Why it matters, Mission Brief, Dataset Used, Algorithm Decision, Candidate Algorithms, Rejected Algorithms, Chosen Algorithm, Key Result, Visualization, Complexity, Defense Notes, and mission-forward explanation.
+After each mission, point to the same defense order: Key Takeaway, Why it matters, Mission Brief, Dataset Used, Algorithm Decision, Candidate Algorithms, Rejected Algorithms, Chosen Algorithm, Graphical Algorithm Explanation, Key Result, Visualization, Complexity, Defense Notes, and mission-forward explanation.
 
 ## Part 1: The Shadow Network
 
@@ -107,11 +107,12 @@ Dashboard flow for Part 6:
 3. Show Dataset Used: file, sheet, rows, and columns.
 4. In the algorithm challenge, show why Insertion Sort and Counting-Radix Sort are rejected.
 5. Select `Modified Stable Merge Sort` as the correct PPT algorithm.
-6. Show the completion status, evidence marks, and the official Part 6 result.
-7. Compare original event order and sorted event order.
-8. Show top 5 urgent events and explain the sorting key.
-9. Use the urgent-event chart as a quick visual summary, then return to the tables for evidence.
-10. Use the Defense Notes to explain why stable sorting matters and why Python `sorted()` is not the main algorithm.
+6. Show Graphical Algorithm Explanation: input event stream, sorting key, recursive split, stable merge, and urgent output.
+7. Show the completion status, evidence marks, and the official Part 6 result.
+8. Compare original event order and sorted event order.
+9. Show top 5 urgent events and explain the sorting key.
+10. Use the urgent-event chart as a quick visual summary, then return to the tables for evidence.
+11. Use the Defense Notes to explain why stable sorting matters and why Python `sorted()` is not the main algorithm.
 
 When explaining the whole group project, do not jump only to Part 6. First use the Defense Matrix or Direct Demo Mode to show Parts 1-9 are complete, then zoom into Part 6 as ZHANG YIMING's assigned section.
 

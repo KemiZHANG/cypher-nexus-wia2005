@@ -26,6 +26,7 @@ from cypher_nexus_project import (
 from dashboard_content import (
     ALGORITHM_CHOICES,
     ALGORITHM_DECISIONS,
+    ALGORITHM_FLOWS,
     CANDIDATE_ALGORITHMS,
     DEFENSE_MATRIX_COLUMNS,
     DEFENSE_NOTES,
@@ -195,6 +196,7 @@ from dashboard_components import (
     card_html,
     coin_reward_panel_html,
     feedback_card_html,
+    flowchart_html,
     inject_css,
     render_dataset_card,
     render_mission_log as render_log_component,
@@ -348,6 +350,14 @@ def render_complexity(part_number, language):
         kind = "complete" if piece.lower().startswith("time") else "muted"
         rendered.append(badge(piece, kind))
     st.markdown(" ".join(rendered), unsafe_allow_html=True)
+
+
+def render_algorithm_flow(part_number, language):
+    flow = ALGORITHM_FLOWS.get(part_number)
+    if not flow:
+        st.info("Algorithm flow explanation is not available for this Part.")
+        return
+    st.markdown(flowchart_html(flow, title=t("algorithm_flow_note", language)), unsafe_allow_html=True)
 
 
 def render_key_result(part_number, result, language):
@@ -673,8 +683,11 @@ def render_algorithm_analysis_sections(part_number, result, language, sheet_over
     section_header(t("chosen_algorithm", language), 8)
     st.markdown(f'<div class="chosen-box"><b>{PART_INFO[part_number]["algorithm"]}</b></div>', unsafe_allow_html=True)
 
+    section_header(t("algorithm_flow", language), 9)
+    render_algorithm_flow(part_number, language)
+
     if show_run_button:
-        section_header(t("run_algorithm", language), 9)
+        section_header(t("run_algorithm", language), 10)
         if st.button(t("run_selected", language), type="primary", key=f"run_part_{part_number}"):
             with st.spinner(t("running_selected", language)):
                 result = run_part_and_store(part_number, sheet_override, language)
@@ -682,20 +695,20 @@ def render_algorithm_analysis_sections(part_number, result, language, sheet_over
         elif result:
             st.success(f"{t('mission_completed', language)}: {MISSION_FEEDBACK[part_number]}")
 
-    section_header(t("key_result", language), 10)
+    section_header(t("key_result", language), 11)
     render_key_result(part_number, result, language)
 
-    section_header(t("visualization", language), 11)
+    section_header(t("visualization", language), 12)
     render_visualization(part_number, result, language)
     render_demo_controls(part_number, result, sheet_override, language)
 
-    section_header(t("time_space_complexity", language), 12)
+    section_header(t("time_space_complexity", language), 13)
     render_complexity(part_number, language)
 
-    section_header(t("defense_notes", language), 13)
+    section_header(t("defense_notes", language), 14)
     render_defense_notes(part_number)
 
-    section_header(t("mission_forward", language), 14)
+    section_header(t("mission_forward", language), 15)
     st.write(MISSION_FORWARD[part_number])
 
     if result:

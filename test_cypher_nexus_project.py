@@ -25,6 +25,7 @@ from dashboard_content import (
 )
 from streamlit_app import (
     ALGORITHM_CHOICES,
+    ALGORITHM_FLOWS,
     CANDIDATE_ALGORITHMS,
     HELPFUL_CHART_PARTS,
     LANGUAGE_OPTIONS,
@@ -217,6 +218,7 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
                 "Candidate Algorithms",
                 "Rejected Algorithms",
                 "Chosen Algorithm",
+                "Graphical Algorithm Explanation",
                 "Key Result",
                 "Visualization",
                 "Time and Space Complexity",
@@ -225,6 +227,8 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
             ],
         )
         self.assertEqual(HELPFUL_CHART_PARTS, {2, 3, 4, 6, 7, 8, 9})
+        self.assertEqual(len(ALGORITHM_FLOWS), 9)
+        self.assertTrue(all(len(flow["steps"]) == 5 for flow in ALGORITHM_FLOWS.values()))
         self.assertEqual(len(KEY_TAKEAWAYS), 9)
         cards = build_mission_cards({}, "English", completed_missions=set())
         self.assertEqual(len(cards), 9)

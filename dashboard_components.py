@@ -367,6 +367,76 @@ def inject_css():
             font-size: .86rem;
             margin: 0 0 8px;
         }
+        .flow-card {
+            border: 1px solid rgba(126, 231, 219, .26);
+            background:
+                linear-gradient(135deg, rgba(9, 20, 32, .92), rgba(13, 33, 44, .86)),
+                linear-gradient(180deg, rgba(126, 231, 219, .08), transparent 60%);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, .22);
+        }
+        .flow-grid {
+            display: flex;
+            align-items: stretch;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .flow-node {
+            flex: 1 1 170px;
+            min-width: 160px;
+            border: 1px solid rgba(126, 231, 219, .26);
+            background: rgba(5, 14, 24, .76);
+            border-radius: 8px;
+            padding: 12px;
+            position: relative;
+        }
+        .flow-step {
+            display: inline-grid;
+            place-items: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: rgba(126, 231, 219, .16);
+            border: 1px solid rgba(126, 231, 219, .42);
+            color: #9ffaf0;
+            font-weight: 900;
+            font-size: .78rem;
+            margin-bottom: 8px;
+        }
+        .flow-title {
+            color: #ffffff;
+            font-weight: 900;
+            font-size: .96rem;
+            margin-bottom: 6px;
+        }
+        .flow-detail {
+            color: #c4d5d7;
+            font-size: .84rem;
+            line-height: 1.38;
+        }
+        .flow-arrow {
+            flex: 0 0 24px;
+            display: grid;
+            place-items: center;
+            color: #ffdf85;
+            font-weight: 900;
+            font-size: 1.15rem;
+        }
+        .flow-arrow:before {
+            content: "->";
+        }
+        .flow-note {
+            border-left: 4px solid #ffcf5c;
+            background: rgba(255, 207, 92, .08);
+            border-radius: 6px;
+            color: #e8f4f2;
+            padding: 10px 12px;
+            margin-top: 12px;
+            font-size: .9rem;
+            line-height: 1.45;
+        }
         .log-line {
             border-left: 3px solid #7ee7db;
             padding-left: 10px;
@@ -407,6 +477,8 @@ def inject_css():
             .mission-hero h1 { font-size: 1.85rem; }
             .coin-reward-panel { grid-template-columns: 1fr; }
             .coin-stage { width: 176px; }
+            .flow-grid { display: grid; grid-template-columns: 1fr; }
+            .flow-arrow { display: none; }
         }
         @media (prefers-reduced-motion: reduce) {
             .mission-card,
@@ -525,6 +597,33 @@ def section_header(label, index=None):
 
 def render_table_note(text):
     st.markdown(f'<div class="table-note">{text}</div>', unsafe_allow_html=True)
+
+
+def flowchart_html(flow, title="Algorithm flow"):
+    steps = flow.get("steps", [])
+    note = flow.get("note", "")
+    nodes = []
+    for index, step in enumerate(steps, start=1):
+        nodes.append(
+            f"""
+            <div class="flow-node">
+                <div class="flow-step">{index:02d}</div>
+                <div class="flow-title">{escape(str(step.get('title', '')))}</div>
+                <div class="flow-detail">{escape(str(step.get('detail', '')))}</div>
+            </div>
+            """
+        )
+        if index < len(steps):
+            nodes.append('<div class="flow-arrow" aria-hidden="true"></div>')
+    note_html = f'<div class="flow-note"><b>{escape(str(title))}:</b> {escape(str(note))}</div>' if note else ""
+    return f"""
+    <div class="flow-card">
+        <div class="flow-grid">
+            {''.join(nodes)}
+        </div>
+        {note_html}
+    </div>
+    """
 
 
 def reward_chip(label):

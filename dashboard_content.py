@@ -181,6 +181,99 @@ ALGORITHM_DECISIONS = {
     9: "Integrated DP Final Strategy is selected because it reuses the official route, access, target-optimization, and threat-ranking outputs to produce one final decision.",
 }
 
+ALGORITHM_FLOWS = {
+    1: {
+        "note": "This flow explains why the selected path is not simply the shortest path: every edge is scored by distance, risk, detection exposure, and route status.",
+        "steps": [
+            {"title": "Input graph data", "detail": "Read From_Node, To_Node, Distance, Risk_Level, Detection_Probability, and Route_Status."},
+            {"title": "Build edge cost", "detail": "Ignore blocked edges and compute modified cost for every available directed edge."},
+            {"title": "Run Dijkstra queue", "detail": "Use a priority queue to expand the lowest modified-cost route first."},
+            {"title": "Recover route", "detail": "Trace the lowest-cost predecessor chain from destination back to start."},
+            {"title": "Output path evidence", "detail": "Show selected route, total distance, total risk, total detection, and final modified cost."},
+        ],
+    },
+    2: {
+        "note": "This flow separates fast exact evidence from slower near-alias evidence, making the identity decision easier to defend.",
+        "steps": [
+            {"title": "Input registry", "detail": "Read Agent_ID, Alias, Access_Key, Status, and Linked_Site."},
+            {"title": "Hash exact matches", "detail": "Group repeated aliases, access keys, and linked sites using hash tables."},
+            {"title": "Check near aliases", "detail": "Use Levenshtein distance to detect names that are similar but not identical."},
+            {"title": "Score suspicion", "detail": "Combine duplicate evidence, near-alias evidence, linked-site evidence, and risky status."},
+            {"title": "Rank identities", "detail": "Output suspicious agents ordered by strongest evidence first."},
+        ],
+    },
+    3: {
+        "note": "This flow shows why dynamic programming is needed: the best target set depends on combinations under several resource limits.",
+        "steps": [
+            {"title": "Input checkpoints", "detail": "Read checkpoint impact plus energy, time, and token costs."},
+            {"title": "Define DP state", "detail": "Track best impact for each energy-time-token capacity combination."},
+            {"title": "Evaluate choices", "detail": "For each checkpoint, compare skipping it with selecting it if resources allow."},
+            {"title": "Backtrack selection", "detail": "Recover the checkpoint set that produced the best final impact."},
+            {"title": "Output resource plan", "detail": "Show selected checkpoints, total usage, remaining capacity, and total impact."},
+        ],
+    },
+    4: {
+        "note": "This flow turns uncertain route properties into one defendable score while keeping every criterion visible.",
+        "steps": [
+            {"title": "Input route options", "detail": "Read travel time, patrol probability, sensor failure, collapse probability, and reward."},
+            {"title": "Compute joint risk", "detail": "Combine multiple probability risks without simply adding them."},
+            {"title": "Normalize criteria", "detail": "Scale reward, time, and risk so they can be compared fairly."},
+            {"title": "Apply weights", "detail": "Use MCDA weights to calculate the final score for each route."},
+            {"title": "Choose route", "detail": "Select the highest final-score route and show the score table."},
+        ],
+    },
+    5: {
+        "note": "This flow explains how the reconstruction avoids greedy skipping and keeps useful delayed fragments.",
+        "steps": [
+            {"title": "Input fragments", "detail": "Read fragment group, sequence number, data block, and integrity status."},
+            {"title": "Group sequence data", "detail": "Separate fragments by segment group and order them by sequence number."},
+            {"title": "Evaluate recoverability", "detail": "Keep valid and useful delayed fragments while marking unusable damaged data."},
+            {"title": "Reconstruct groups", "detail": "Build the best available sequence for each group using prior state decisions."},
+            {"title": "Output signal", "detail": "Show reconstructed activation groups and skipped fragments."},
+        ],
+    },
+    6: {
+        "note": "This flow is the clearest graphical explanation for Part 6: input events become a priority order through a stable multi-field merge sort.",
+        "steps": [
+            {"title": "Input event stream", "detail": "Read Event_ID, Threat_Priority, Timestamp, Event_Type, Code_Value, and original index."},
+            {"title": "Build sorting key", "detail": "Use (-Threat_Priority, Timestamp, Launch_Rank, Original_Index)."},
+            {"title": "Split recursively", "detail": "Divide the event list into smaller halves for merge sort."},
+            {"title": "Stable merge", "detail": "Compare keys and preserve original order when all priority fields tie."},
+            {"title": "Output urgent order", "detail": "Show original order, sorted order, and Top 5 urgent events."},
+        ],
+    },
+    7: {
+        "note": "This flow shows that the random choice is controlled by risk evidence, not pure chance.",
+        "steps": [
+            {"title": "Input sector data", "detail": "Read patrol frequency, thermal scan level, drone coverage, prediction risk, and decoy value."},
+            {"title": "Compute safety score", "detail": "Reward safer sectors and penalize surveillance and predicted movement."},
+            {"title": "Convert to weights", "detail": "Turn sector scores into selection probabilities."},
+            {"title": "Apply fixed seed", "detail": "Use reproducible controlled randomisation for demo and defense."},
+            {"title": "Output sector", "detail": "Show chosen sector and probability chart."},
+        ],
+    },
+    8: {
+        "note": "This flow separates phrase detection from threat ranking, so text matching becomes an actionable priority list.",
+        "steps": [
+            {"title": "Input messages", "detail": "Read Message_ID, Text_Stream, Route_Tag, and trigger phrase evidence."},
+            {"title": "Scan phrases", "detail": "Use brute force string matching to check trigger phrases inside each message."},
+            {"title": "Add route context", "detail": "Use route tags and phrase weights to strengthen threat evidence."},
+            {"title": "Rank threat score", "detail": "Sort messages by computed threat score and severity level."},
+            {"title": "Output alerts", "detail": "Show ranked messages and threat score chart."},
+        ],
+    },
+    9: {
+        "note": "This flow makes Part 9 more than a story ending: it shows how earlier official algorithm outputs feed the final strategy.",
+        "steps": [
+            {"title": "Use Part 1 output", "detail": "Take the selected route as the access path into the target network."},
+            {"title": "Use Part 2 output", "detail": "Use suspicious identity evidence as internal access support."},
+            {"title": "Use Part 3 output", "detail": "Keep selected targets within energy, time, and token limits."},
+            {"title": "Use Part 8 output", "detail": "Prioritize the highest-threat systems and route tags."},
+            {"title": "Output final strategy", "detail": "Show selected disruption targets, resource usage, and final effects."},
+        ],
+    },
+}
+
 DEFENSE_NOTES = {
     1: [
         "Directed graph matters because reverse travel is not assumed.",
@@ -254,6 +347,7 @@ RESULT_PAGE_SECTIONS = [
     "Candidate Algorithms",
     "Rejected Algorithms",
     "Chosen Algorithm",
+    "Graphical Algorithm Explanation",
     "Key Result",
     "Visualization",
     "Time and Space Complexity",

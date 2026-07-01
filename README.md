@@ -188,6 +188,7 @@ powershell -ExecutionPolicy Bypass -File .\run_dashboard_chrome.ps1
 - Direct Demo Mode：快速显示官方输出
 - 数据集面板：文件、sheet、行数、使用列
 - Algorithm Decision：候选算法、被拒算法、选定算法
+- Graphical Algorithm Explanation：用流程图节点展示每个 Part 的 Input、Processing、Algorithm Steps 和 Output
 - Key Takeaway / Why it matters
 - 结果卡片、图表、复杂度徽章、答辩要点
 - 答对后奖励币飞入奖励袋，并记录证据标记
@@ -419,6 +420,7 @@ Dashboard features:
 - Direct Demo Mode: quickly show official outputs
 - dataset file, sheet, row count, and columns used
 - candidate algorithms, rejected algorithms, and chosen algorithm
+- flowchart-style graphical algorithm explanation for each Part, covering input, processing, algorithm steps, and output
 - Key Takeaway / Why it matters
 - result cards, charts, complexity badges, and defense notes
 - reward-token animation and evidence-mark feedback after correct answers
