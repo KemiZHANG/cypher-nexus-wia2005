@@ -15,7 +15,7 @@ from cypher_nexus_project import (
     require_columns,
     stable_merge_sort_events,
 )
-from dashboard_components import badge, card_html, coin_reward_panel_html, flowchart_html
+from dashboard_components import badge, card_html, coin_reward_panel_html, flowchart_html, trace_step_card_html
 from dashboard_content import (
     ALGORITHM_DECISIONS,
     DEFENSE_MATRIX_COLUMNS,
@@ -219,6 +219,7 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
                 "Rejected Algorithms",
                 "Chosen Algorithm",
                 "Graphical Algorithm Explanation",
+                "Detailed Algorithm Trace",
                 "Key Result",
                 "Visualization",
                 "Time and Space Complexity",
@@ -363,6 +364,12 @@ class CypherNexusAlgorithmTests(unittest.TestCase):
         self.assertIn("Build sorting key", html)
         self.assertIn("Stable merge", html)
         self.assertNotIn("\n    <div", html)
+
+    def test_trace_step_card_supports_dataset_to_output_explanation(self):
+        html = trace_step_card_html("TRACE", "Dataset to output trace", "Real rows become intermediate calculations.")
+        self.assertIn("TRACE", html)
+        self.assertIn("Dataset to output trace", html)
+        self.assertIn("Real rows become intermediate calculations.", html)
 
     def test_cli_contract_for_required_commands_is_still_available(self):
         self.assertEqual(set(RUNNERS_BY_PART), set(range(1, TOTAL_PARTS + 1)))

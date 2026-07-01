@@ -15,11 +15,13 @@ from cypher_nexus_project import (
     TOTAL_PARTS,
     choose_start_and_destination,
     controlled_randomisation,
+    event_sort_key,
     joint_risk_from_row,
     modified_risk_aware_dijkstra,
     normalize_values,
     prepare_part_dataframe,
     run_all_parts,
+    timestamp_to_seconds,
 )
 
 
@@ -203,6 +205,7 @@ from dashboard_components import (
     render_table_note,
     reward_chip,
     section_header,
+    trace_step_card_html,
 )
 
 
@@ -358,6 +361,268 @@ def render_algorithm_flow(part_number, language):
         st.info("Algorithm flow explanation is not available for this Part.")
         return
     st.markdown(flowchart_html(flow, title=t("algorithm_flow_note", language)), unsafe_allow_html=True)
+
+
+def existing_columns(df, columns):
+    return [column for column in columns if column in df.columns]
+
+
+def limited_df(df, columns=None, rows=8):
+    if df is None or df.empty:
+        return pd.DataFrame()
+    selected = df[existing_columns(df, columns)] if columns else df
+    return selected.head(rows).reset_index(drop=True)
+
+
+def render_trace_table(title, note, data, columns=None, rows=8):
+    st.markdown(trace_step_card_html(title.split(" ", 1)[0], title, note), unsafe_allow_html=True)
+    df = dataframe_from_rows(data) if isinstance(data, list) else data
+    table = limited_df(df, columns, rows)
+    if table.empty:
+        st.caption("No trace data available for this step.")
+        return
+    st.dataframe(table, width="stretch", hide_index=True)
+
+
+def dataset_trace_dataframe(part_number, sheet_override):
+    if part_number == 9:
+        return pd.DataFrame()
+    try:
+        df, _ = get_part_dataframe_cached(part_number, sheet_override)
+        return df
+    except Exception as error:
+        st.warning(f"Dataset trace unavailable: {error}")
+        return pd.DataFrame()
+
+
+def render_algorithm_trace(part_number, result, language, sheet_override):
+    st.markdown(
+        trace_step_card_html(
+            "TRACE",
+            "Dataset to output trace",
+            "This section uses real dataset rows, intermediate calculation tables, and the official result to show how the algorithm transforms input into output.",
+        ),
+        unsafe_allow_html=True,
+    )
+
+    df = dataset_trace_dataframe(part_number, sheet_override)
+
+    if part_number != 9:
+        render_trace_table(
+            "01 Real dataset input",
+            "Sample rows from the actual dataset columns used by this Part.",
+            df,
+            PART_INFO[part_number]["columns"],
+            rows=8,
+        )
+
+    if not result:
+        st.info("Run this Part or use Direct Demo Mode to unlock the intermediate calculation and final output trace.")
+        return
+
+    if part_number == 1:
+        edge_df = df.copy()
+        for column in ["Distance", "Risk_Level", "Detection_Probability"]:
+            edge_df[column] = pd.to_numeric(edge_df[column], errors="coerce").fillna(0)
+        edge_df["Modified_Cost"] = edge_df["Distance"] + edge_df["Risk_Level"] * 2 + edge_df["Detection_Probability"] * 10
+        render_trace_table(
+            "02 Edge cost calculation",
+            "Each directed edge is converted into the modified Dijkstra cost: Distance + Risk_Level * 2 + Detection_Probability * 10.",
+            edge_df,
+            ["From_Node", "To_Node", "Distance", "Risk_Level", "Detection_Probability", "Route_Status", "Modified_Cost"],
+            rows=10,
+        )
+        route = result.get("route", [])
+        route_pairs = list(zip(route, route[1:]))
+        selected_edges = []
+        for source, target in route_pairs:
+            match = edge_df[(edge_df["From_Node"].astype(str) == str(source)) & (edge_df["To_Node"].astype(str) == str(target))]
+            if not match.empty:
+                selected_edges.append(match.iloc[0].to_dict())
+        render_trace_table(
+            "03 Selected path evidence",
+            "The final route is reconstructed from the lowest modified-cost predecessor chain.",
+            selected_edges,
+            ["From_Node", "To_Node", "Distance", "Risk_Level", "Detection_Probability", "Modified_Cost"],
+            rows=10,
+        )
+
+    elif part_number == 2:
+        duplicate_rows = []
+        for column in ["Alias", "Access_Key", "Linked_Site"]:
+            if column not in df.columns:
+                continue
+            counts = df[column].dropna().astype(str).value_counts()
+            for value, count in counts[counts > 1].items():
+                duplicate_rows.append({"Evidence_Field": column, "Repeated_Value": value, "Count": int(count)})
+        render_trace_table(
+            "02 Hash-table evidence",
+            "Repeated aliases, access keys, and linked sites are grouped before suspicion scoring.",
+            duplicate_rows,
+            ["Evidence_Field", "Repeated_Value", "Count"],
+            rows=12,
+        )
+        render_trace_table(
+            "03 Suspicion score output",
+            "The final table combines exact duplicates, near-alias checks, linked-site evidence, and status risk.",
+            result.get("suspicious_identities", []),
+            ["Agent_ID", "Alias", "Access_Key", "Status", "Linked_Site", "Suspicion_Score", "Reasons"],
+            rows=10,
+        )
+
+    elif part_number == 3:
+        selected = dataframe_from_rows(result.get("selected_checkpoints", []))
+        if not selected.empty:
+            selected["Cumulative_Energy"] = selected["Energy"].cumsum()
+            selected["Cumulative_Time"] = selected["Time"].cumsum()
+            selected["Cumulative_Token"] = selected["Token"].cumsum()
+            selected["Cumulative_Impact"] = selected["Impact"].cumsum()
+        render_trace_table(
+            "02 DP resource decision",
+            "The selected checkpoints show how the DP result accumulates resources while staying inside capacity limits.",
+            selected,
+            ["Checkpoint", "Energy", "Time", "Token", "Impact", "Cumulative_Energy", "Cumulative_Time", "Cumulative_Token", "Cumulative_Impact"],
+            rows=10,
+        )
+        caps = result.get("capacities", (0, 0, 0))
+        usage = pd.DataFrame(
+            [
+                {"Resource": "Energy", "Used": result.get("total_energy", 0), "Capacity": caps[0]},
+                {"Resource": "Time", "Used": result.get("total_time", 0), "Capacity": caps[1]},
+                {"Resource": "Token", "Used": result.get("total_tokens", 0), "Capacity": caps[2]},
+            ]
+        )
+        usage["Remaining"] = usage["Capacity"] - usage["Used"]
+        render_trace_table("03 Final resource usage", "The official output is checked against all resource constraints.", usage)
+
+    elif part_number == 4:
+        render_trace_table(
+            "02 MCDA normalized scoring",
+            "Raw route uncertainty is transformed into normalized risk, time, reward, and final weighted score.",
+            result.get("routes", []),
+            ["Route_ID", "Route_Name", "Joint_Risk", "N_Risk", "N_Time", "N_Reward", "Final_Score"],
+            rows=10,
+        )
+        render_trace_table(
+            "03 Chosen route evidence",
+            "The first row after sorting by Final_Score is the official route decision.",
+            [result.get("chosen_route", {})],
+            ["Route_ID", "Route_Name", "Joint_Risk", "N_Risk", "N_Time", "N_Reward", "Final_Score"],
+        )
+
+    elif part_number == 5:
+        render_trace_table(
+            "02 Fragment reconstruction",
+            "Each segment group records which fragments were kept and the reconstructed sequence after DP-style evaluation.",
+            result.get("groups", []),
+            ["Group", "Score", "Used_Fragments", "Sequence"],
+            rows=10,
+        )
+        render_trace_table(
+            "03 Skipped fragment evidence",
+            "Fragments that are corrupted, missing, or lower-value are explicitly recorded instead of silently ignored.",
+            result.get("skipped_fragments", []),
+            ["Group", "Fragment_ID", "Status", "Reason"],
+            rows=10,
+        )
+
+    elif part_number == 6:
+        key_rows = []
+        for index, row in df.reset_index(drop=True).iterrows():
+            record = row.to_dict()
+            record["Original_Index"] = index
+            key = event_sort_key(record)
+            key_rows.append(
+                {
+                    "Event_ID": record.get("Event_ID"),
+                    "Threat_Priority": record.get("Threat_Priority"),
+                    "Timestamp": record.get("Timestamp"),
+                    "Event_Type": record.get("Event_Type"),
+                    "Original_Index": index,
+                    "Negative_Priority": key[0],
+                    "Timestamp_Seconds": timestamp_to_seconds(record.get("Timestamp")),
+                    "Launch_Rank": key[2],
+                    "Full_Sort_Key": str(key),
+                }
+            )
+        render_trace_table(
+            "02 Sorting key table",
+            "Every event receives the exact key used by Modified Stable Merge Sort: (-Threat_Priority, Timestamp, Launch_Rank, Original_Index).",
+            key_rows,
+            ["Event_ID", "Threat_Priority", "Timestamp", "Event_Type", "Original_Index", "Negative_Priority", "Timestamp_Seconds", "Launch_Rank", "Full_Sort_Key"],
+            rows=12,
+        )
+        render_trace_table(
+            "03 Stable sorted output",
+            "The final sorted order is produced by comparing the sort keys while preserving original order for full ties.",
+            result.get("sorted_order", []),
+            ["Event_ID", "Threat_Priority", "Timestamp", "Zone", "Event_Type", "Code_Value"],
+            rows=12,
+        )
+        render_trace_table(
+            "04 Top urgent events",
+            "The first five rows after sorting are the urgent action list used in the official output.",
+            result.get("top_five", []),
+            ["Event_ID", "Threat_Priority", "Timestamp", "Zone", "Event_Type", "Code_Value"],
+            rows=5,
+        )
+
+    elif part_number == 7:
+        render_trace_table(
+            "02 Risk-to-probability table",
+            "Sector risk and decoy value are converted into selection score and probability.",
+            result.get("sector_scores", []),
+            ["Sector", "Risk", "Decoy_Value", "Selection_Score", "Probability"],
+            rows=10,
+        )
+        render_trace_table(
+            "03 Controlled random draw",
+            "A fixed random seed makes the demonstration reproducible while still avoiding deterministic movement.",
+            [
+                {
+                    "Random_Draw": result.get("random_draw"),
+                    "Chosen_Sector": result.get("chosen_sector", {}).get("Sector"),
+                    "Chosen_Probability": result.get("chosen_sector", {}).get("Probability"),
+                }
+            ],
+        )
+
+    elif part_number == 8:
+        weights = [{"Trigger_Phrase": phrase, "Weight": weight} for phrase, weight in result.get("trigger_weights", {}).items()]
+        render_trace_table(
+            "02 Trigger phrase weights",
+            "Each phrase contributes threat points when brute-force matching finds it inside a message.",
+            weights,
+            ["Trigger_Phrase", "Weight"],
+            rows=12,
+        )
+        render_trace_table(
+            "03 Ranked message output",
+            "Detected phrases and route-tag evidence become the final threat score and threat level.",
+            result.get("ranked_messages", []),
+            ["Message_ID", "Detected_Phrases", "Route_Tag", "Threat_Score", "Threat_Level"],
+            rows=10,
+        )
+
+    elif part_number == 9:
+        render_trace_table(
+            "01 Previous output inputs",
+            "Part 9 has no separate dataset; it synthesizes official outputs from Parts 1, 2, 3, and 8.",
+            result.get("strategy_steps", []),
+            ["Phase", "Source", "Decision", "Evidence"],
+            rows=8,
+        )
+        render_trace_table(
+            "02 Threat and target evidence",
+            "The final strategy combines high-ranked messages with DP-selected high-impact targets.",
+            result.get("top_threats", []) + result.get("selected_targets", []),
+            rows=10,
+        )
+        render_trace_table(
+            "03 Final effects",
+            "The final output is a constrained disruption plan with explicit resource usage and expected mission effects.",
+            [{"Effect": effect} for effect in result.get("final_effects", [])],
+        )
 
 
 def render_key_result(part_number, result, language):
@@ -686,8 +951,11 @@ def render_algorithm_analysis_sections(part_number, result, language, sheet_over
     section_header(t("algorithm_flow", language), 9)
     render_algorithm_flow(part_number, language)
 
+    section_header(t("algorithm_trace", language), 10)
+    render_algorithm_trace(part_number, result, language, sheet_override)
+
     if show_run_button:
-        section_header(t("run_algorithm", language), 10)
+        section_header(t("run_algorithm", language), 11)
         if st.button(t("run_selected", language), type="primary", key=f"run_part_{part_number}"):
             with st.spinner(t("running_selected", language)):
                 result = run_part_and_store(part_number, sheet_override, language)
@@ -695,20 +963,20 @@ def render_algorithm_analysis_sections(part_number, result, language, sheet_over
         elif result:
             st.success(f"{t('mission_completed', language)}: {MISSION_FEEDBACK[part_number]}")
 
-    section_header(t("key_result", language), 11)
+    section_header(t("key_result", language), 12)
     render_key_result(part_number, result, language)
 
-    section_header(t("visualization", language), 12)
+    section_header(t("visualization", language), 13)
     render_visualization(part_number, result, language)
     render_demo_controls(part_number, result, sheet_override, language)
 
-    section_header(t("time_space_complexity", language), 13)
+    section_header(t("time_space_complexity", language), 14)
     render_complexity(part_number, language)
 
-    section_header(t("defense_notes", language), 14)
+    section_header(t("defense_notes", language), 15)
     render_defense_notes(part_number)
 
-    section_header(t("mission_forward", language), 15)
+    section_header(t("mission_forward", language), 16)
     st.write(MISSION_FORWARD[part_number])
 
     if result:

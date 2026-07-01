@@ -617,6 +617,19 @@ def flowchart_html(flow, title="Algorithm flow"):
     return '<div class="flow-card"><div class="flow-grid">' + "".join(nodes) + "</div>" + note_html + "</div>"
 
 
+def trace_step_card_html(step, title, body):
+    safe_step = escape(str(step))
+    safe_title = escape(str(title))
+    safe_body = escape(str(body))
+    return (
+        '<div class="section-card">'
+        f'<span class="badge badge-complete">{safe_step}</span>'
+        f'<div class="card-title">{safe_title}</div>'
+        f'<div class="card-small">{safe_body}</div>'
+        "</div>"
+    )
+
+
 def reward_chip(label):
     return f'<span class="reward-chip"><span class="reward-dot"></span>{label}</span>'
 

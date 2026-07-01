@@ -213,6 +213,7 @@ Candidate Algorithms
 Rejected Algorithms
 Chosen Algorithm
 Graphical Algorithm Explanation
+Detailed Algorithm Trace
 Key Result
 Visualization
 Time and Space Complexity
