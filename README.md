@@ -218,17 +218,15 @@ Part 6 使用 Modified Stable Merge Sort，排序键为：
 
 ## Google Colab
 
-上传：
+正式 Colab 展示文件：
 
-- `cypher_nexus_project.py`
-- `colab_runner.py`
-- `requirements.txt`
-- `Datasets (2).zip`
+https://colab.research.google.com/github/KemiZHANG/cypher-nexus-wia2005/blob/main/cypher_nexus_colab_demo.ipynb
 
-然后运行：
+Colab notebook 会从 GitHub clone 项目，安装依赖，展示数据集结构，运行全部 Part，并逐个展示 Part 1-9 的 dataset、graphical algorithm explanation、implementation code 和 official output。
+
+如需使用简单 runner，也可以运行：
 
 ```python
-!pip install -r requirements.txt
 !python colab_runner.py
 ```
 
@@ -443,17 +441,15 @@ It means higher priority first, earlier timestamp first, launch-related first, a
 
 ## Google Colab
 
-Upload:
+Official Colab demonstration notebook:
 
-- `cypher_nexus_project.py`
-- `colab_runner.py`
-- `requirements.txt`
-- `Datasets (2).zip`
+https://colab.research.google.com/github/KemiZHANG/cypher-nexus-wia2005/blob/main/cypher_nexus_colab_demo.ipynb
 
-Then run:
+The Colab notebook clones the GitHub project, installs dependencies, shows dataset structure, runs all Parts, and displays Part 1-9 dataset evidence, graphical algorithm explanation, implementation code, and official output.
+
+The simple runner can also be executed with:
 
 ```python
-!pip install -r requirements.txt
 !python colab_runner.py
 ```
 
